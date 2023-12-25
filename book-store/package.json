@@ -11,12 +11,15 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.0.1",
+    "clsx": "^2.0.0",
     "install": "^0.13.0",
+    "lucide-react": "^0.302.0",
     "npm": "^10.2.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^9.0.4",
-    "redux": "^5.0.1"
+    "redux": "^5.0.1",
+    "tailwind-merge": "^2.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",
