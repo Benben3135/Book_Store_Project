@@ -18,3 +18,23 @@ export async function getAllBooks(req: express.Request, res: express.Response) {
         res.status(500).send({ ok: false, error })  //closer - without it the error could stack in loop
     }
 }
+
+export async function createBook(req: express.Request, res: express.Response) {
+    try {
+
+        const { title, author, pageNum, publisher, description, image, review, likes } = req.body
+        if (!title || !author || !image) throw new Error("no data in FUNCTION createAllBook in FILE booksCtrl.ts")
+
+        const query = `INSERT INTO books (title, author, image) VALUES ("${title}", '${author}', '${image}');`;
+        connection.query(query, (err, results) => {
+            try {
+                if (err) throw err;
+                res.send({ ok: true, results })
+            } catch (error) {
+                res.status(500).send({ ok: false, error })
+            }
+        })
+    } catch (error) {
+        res.status(500).send({ ok: false, error })
+    }
+}

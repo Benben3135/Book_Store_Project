@@ -1,10 +1,11 @@
 import express from "express"
+import { createBook, getAllBooks } from "./booksCont"
 
 const router = express.Router()
 
 router
-.get("", () => {})  //ALL
-.post("", creatAllBooks)  //tamar
+.get("", getAllBooks)  //ALL book
+.post("", createBook)  
 
 
 //good routing example :/api/users

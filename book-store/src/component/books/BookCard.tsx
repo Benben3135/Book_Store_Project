@@ -1,14 +1,13 @@
 import React, { FC , useState} from 'react'
 
 export interface Book {
-    id: number,
     title: string,
     author: string,
     pageNum: number,
-    Publisher: string,
+    publisher: string,
     description: string,
     image: string,
-    revue: string[],
+    review: string[],
     likes: number,
 }
 
