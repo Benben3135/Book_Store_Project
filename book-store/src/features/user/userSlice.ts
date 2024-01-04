@@ -5,7 +5,7 @@ export interface UserState{
     value: string;
 }
 
-const initialState: UserState ={
+const initialState: UserState = {
     value: "",
 };
 
