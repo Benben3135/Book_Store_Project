@@ -161,6 +161,11 @@ const Login = () => {
                   </svg>
                   Sign in with Google
                 </Button>
+                <Button
+                onClick={() => navigate("/register")}
+                variant="ghost">
+                  Don't have an user yet?
+                </Button>
               </form>
             </div>
           </div>
