@@ -19,12 +19,23 @@ import {
 import { Star } from "lucide-react";
 import { Minimize } from "lucide-react";
 import { ArrowRight } from "lucide-react";
+import { useDispatch } from "react-redux";
+import {noScroll} from "../../features/layout/isScrollSlice"
 
 const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [emailWrong, setEmailWrong] = useState<boolean>(false)
   const navigate = useNavigate()
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(noScroll()); // Dispatch the scroll action
+  }, [dispatch]);
+
+
+
   useEffect(() => {
     console.log(emailWrong);
   },[emailWrong])
@@ -54,9 +65,8 @@ const Login = () => {
   };
 
   return (
-    <div className=" h-full w-full bg-gradient-to-r from-purple-100 to-blue-200 group ">
-      <div className=" w-full h-full flex flex-col justify-center items-center">
-        <div className="bg-gradient-to-r from-gray-200 to-sky-200 w-96 h-fit p-3 rounded-lg shadow-lg">
+    <div className=" h-full w-full bg-gradient-to-r from-purple-100 to-blue-200 group overflow-hidden flex flex-col justify-center items-center">
+        <div className="bg-gradient-to-r from-gray-200 to-sky-200 w-96 h-fit p-3 rounded-lg shadow-lg overflow-hidden">
           <div className=" w-full h-full flex flex-col items-center justify-start">
             <h1 className=" text-3xl font-extrabold pt-4">LOGIN</h1>
             <div className=" h-fit w-3/4 pt-8">
@@ -155,7 +165,6 @@ const Login = () => {
             </div>
           </div>
         </div>
-      </div>
     </div>
   );
 };
