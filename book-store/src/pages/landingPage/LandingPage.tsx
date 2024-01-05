@@ -10,7 +10,7 @@ const LandingPage = () => {
 
 
   return (
-    <div className=" h-full w-full bg-gradient-to-r from-cyan-200 to-blue-200 group">
+    <div className=" h-full w-full bg-gradient-to-r from-purple-100 to-blue-200 group">
       <div className=" py-20 mx-auto text-center flex flex-col items-center max-w-3xl">
         <h1 className=" font-sans antialiased text-4xl font-bold tracking-tight text-primary sm:text-6xl">
           Welcome to the best books library{" "}

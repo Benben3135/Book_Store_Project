@@ -8,7 +8,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-gradient-to-r from-slate-400 to-red-200 sticky z-50 top-0 inset-x-0 h-8 w-screen shadow-md">
+    <div className="bg-gradient-to-r from-slate-400 to-gray-200 sticky z-50 top-0 inset-x-0 h-8 w-screen shadow-md">
       {isUserValue ? (
         <div className=" w-full flex flex-row h-full"></div>
       ) : (

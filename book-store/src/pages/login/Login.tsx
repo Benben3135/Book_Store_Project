@@ -1,9 +1,10 @@
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../../firebase";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,14 +23,23 @@ import { ArrowRight } from "lucide-react";
 const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [emailWrong, setEmailWrong] = useState<boolean>(false)
+  const navigate = useNavigate()
+  useEffect(() => {
+    console.log(emailWrong);
+  },[emailWrong])
 
   const handleGoogleLogin = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
         // Google sign-in success
+        console.log("result is" ,result)
+        if(result){
+          navigate("/")
+        }
       })
       .catch((error) => {
-        // Handle errors
+        console.error("Error signing in with email and password", error);
       });
   };
 
@@ -39,12 +49,12 @@ const Login = () => {
         // Email sign-in success
       })
       .catch((error) => {
-        // Handle errors
+        setEmailWrong(true)
       });
   };
 
   return (
-    <div className=" h-full w-full bg-gradient-to-r from-cyan-200 to-blue-200 group ">
+    <div className=" h-full w-full bg-gradient-to-r from-purple-100 to-blue-200 group ">
       <div className=" w-full h-full flex flex-col justify-center items-center">
         <div className="bg-gradient-to-r from-gray-200 to-sky-200 w-96 h-fit p-3 rounded-lg shadow-lg">
           <div className=" w-full h-full flex flex-col items-center justify-start">
@@ -69,6 +79,14 @@ const Login = () => {
                   placeholder="Password"
                   onInput={(e) => setPassword(e.currentTarget.value)} // Update the password state
                 />
+
+                {emailWrong? (
+                  <div className="">
+                    <p className=" text-sm font-semibold text-muted-foreground text-red-800">Email ot password don't match a user</p>
+                  </div>
+                ):(
+                  null
+                )}
 
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
