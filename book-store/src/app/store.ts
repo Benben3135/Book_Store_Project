@@ -1,11 +1,13 @@
 import { Action, ThunkAction, configureStore } from "@reduxjs/toolkit";
 import userReducer from "../features/user/userSlice"
 import isUserReducer from "../features/user/isUserSlice"
+import isScrollReducer from "../features/layout/isScrollSlice"
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
-    isUser: isUserReducer
+    isUser: isUserReducer,
+    isScroll: isScrollReducer
   },
 });
 
