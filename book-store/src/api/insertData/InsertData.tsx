@@ -1,5 +1,5 @@
 import { books } from "../../util/books"
-import { Book } from './../books/BookCard';
+import { Book } from '../../component/books/BookCard';
 
 const InsertData = async (books: Book[]) => {
    
