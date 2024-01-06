@@ -1,17 +1,23 @@
-import express from 'express'
+import  express  from 'express';
+// import { books } from './../src/util/books';
+require('dotenv').config();
 
-require("dotenv").config()
+const app = express();
+const PORT = process.env.PORT || 4000;
 
-const app = express()
+// Middleware
+app.use(express.json());
 
-const PORT = process.evn.PORT || 4000
+// Require your routes
+import booksRoutes from "./API/booksRoutes"
+import userRoutes from "./API/users/userRoutes"
 
-//all app.use() are middlewares
-app.use(express.json())  
+// Use routes
+app.use('/api/books', booksRoutes);
+app.use("/api/users", userRoutes)
 
-import bookRoutes from "./API/booksRoutes"
-app.use("/api/books", booksRoutes)
+
 
 app.listen(PORT, () => {
-    console.log(`server running on port: ${PORT}`)
-})
+    console.log(`Server running on port: ${PORT}`);
+});
