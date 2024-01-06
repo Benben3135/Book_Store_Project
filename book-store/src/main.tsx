@@ -12,7 +12,7 @@ const AppWrapper = () => {
   const isOverflowNeeded = useSelector(isScrollSelector);
 
   return (
-    <div className={`h-screen w-screen overflow-x-hidden ${isOverflowNeeded ? 'overflow-y-auto' : 'overflow-hidden'}`}>
+    <div className={`h-screen w-screen overflow-x-hidden ${isOverflowNeeded ? 'overflow-y-auto overflow-x-hidden' : 'overflow-hidden'}`}>
       <App />
     </div>
   );
