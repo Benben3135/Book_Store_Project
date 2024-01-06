@@ -43,8 +43,8 @@ const Login = () => {
   const handleGoogleLogin = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
-        // Google sign-in success
         console.log("result is" ,result)
+        
         if(result){
           navigate("/")
         }
@@ -67,7 +67,7 @@ const Login = () => {
   return (
     <div className=" h-full w-full bg-gradient-to-r from-purple-100 to-blue-200 group overflow-hidden flex flex-col justify-center items-center">
         <div className="bg-gradient-to-r from-gray-200 to-sky-200 w-96 h-fit p-3 rounded-lg shadow-lg overflow-hidden">
-          <div className=" w-full h-full flex flex-col items-center justify-start">
+          <div className="flex flex-col items-center justify-start">
             <h1 className=" text-3xl font-extrabold pt-4">LOGIN</h1>
             <div className=" h-fit w-3/4 pt-8">
               <form
