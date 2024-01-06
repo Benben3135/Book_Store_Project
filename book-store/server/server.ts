@@ -1,4 +1,5 @@
-const express = require('express');
+import  express  from 'express';
+// import { books } from './../src/util/books';
 require('dotenv').config();
 
 const app = express();
@@ -8,19 +9,14 @@ const PORT = process.env.PORT || 4000;
 app.use(express.json());
 
 // Require your routes
-const booksRoutes = require('./API/booksRoutes');
+import booksRoutes from "./API/booksRoutes"
+import userRoutes from "./API/users/userRoutes"
 
 // Use routes
-// app.use('/api/books', booksRoutes);
+app.use('/api/books', booksRoutes);
+app.use("/api/users", userRoutes)
 
-// app.get('/check', (req, res) => {
-//     try {
-//         console.log('success!');
-//         res.status(200).send({ ok: true }); // Status 200 for success
-//     } catch (error) {
-//         res.status(500).send({ error: 'Internal Server Error' }); // Send error response
-//     }
-// });
+
 
 app.listen(PORT, () => {
     console.log(`Server running on port: ${PORT}`);

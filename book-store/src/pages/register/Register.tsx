@@ -63,7 +63,7 @@ const Register = () => {
         .then((userCredential) => {
           // Registration success
           console.log("Registration successful", userCredential);
-          navigate("/"); // Navigate to the home page or dashboard after successful registration
+          navigate("/homePage")
         })
         .catch((error) => {
           console.error("Error during registration", error);
