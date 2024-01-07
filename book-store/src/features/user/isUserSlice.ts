@@ -15,11 +15,14 @@ export const isUserSlice = createSlice({
     reducers: {
         thereUser: (state) => {
             state.value = true
-        }
+        },
+        thereNoUser: (state) => {
+            state.value = false
+        },
     }
 })
 
-export const {thereUser} = isUserSlice.actions;
+export const {thereUser , thereNoUser} = isUserSlice.actions;
 
 export const isUserSelector = (state: RootState) => state.isUser.value;
 

@@ -1,4 +1,6 @@
 import TypingAnimation from "@/components/animations/TypingAnimation ";
+import axios from "axios";
+import {register} from "../../../api/users/register"
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -36,12 +38,10 @@ const Register = () => {
   const [passMatch, setPassMatch] = useState<boolean>(true);
   const [showTick, setShowTick] = useState<boolean>(false);
   const [passNotMatch, setPassNotMatch] = useState<Boolean>(false);
-  const [passShort,setPassShort] = useState<boolean>(false)
-  const [passAnimate, setPassAnimate] = useState<boolean>(false)
-  const [excistAnimate, setExcistAnimate] = useState<boolean>(false)
+  const [passShort, setPassShort] = useState<boolean>(false);
+  const [passAnimate, setPassAnimate] = useState<boolean>(false);
+  const [excistAnimate, setExcistAnimate] = useState<boolean>(false);
   const navigate = useNavigate();
-
-
 
   useEffect(() => {
     checkPass();
@@ -55,39 +55,42 @@ const Register = () => {
   const handleRegister = (email: string, password: string) => {
     if (passMatch) {
       setPassNotMatch(false);
-      if(password.length < 7){
-        setPassShort(true)
-        setPassAnimate(true)
+      if (password.length < 7) {
+        setPassShort(true);
+        setPassAnimate(true);
       }
       createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           // Registration success
           console.log("Registration successful", userCredential);
-          navigate("/homePage")
+          navigate("/homePage");
         })
         .catch((error) => {
           console.error("Error during registration", error);
-          setExcistAnimate(true)
+          setExcistAnimate(true);
         });
     } else {
       setPassNotMatch(true);
     }
   };
 
-  //registerwithgoogle
   const handleGoogleLogin = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
         // Google sign-in success
         console.log("result is", result);
         if (result) {
-          navigate("/");
+         registerUser(result)
         }
       })
       .catch((error) => {
         console.error("Error signing in with email and password", error);
       });
   };
+
+  const registerUser = async (result:any) => {
+    await register(result)
+  }
 
   const checkPass = () => {
     if (password === verPassword) {
@@ -96,6 +99,16 @@ const Register = () => {
       setPassMatch(false);
     }
   };
+
+  const handleCheck = async () => {
+    try {
+      const data = await check();
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  handleCheck()
 
   return (
     <div
@@ -271,7 +284,12 @@ const Register = () => {
                 ) : null}
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    <Button onClick={() => setPassAnimate(false)} className={passAnimate? " animate-pulse outline":""} size="sm" variant="secondary">
+                    <Button
+                      onClick={() => setPassAnimate(false)}
+                      className={passAnimate ? " animate-pulse outline" : ""}
+                      size="sm"
+                      variant="secondary"
+                    >
                       Password Instractions
                     </Button>
                   </AlertDialogTrigger>
@@ -303,7 +321,11 @@ const Register = () => {
 
                 <Button
                   onClick={handleGoogleLogin}
-                  className={excistAnimate? "flex flex-row items-center justify-start gap-8 hover:bg-slate-500 transition-all animate-pulse outline":" flex flex-row items-center justify-start gap-8 hover:bg-slate-500 transition-all"}
+                  className={
+                    excistAnimate
+                      ? "flex flex-row items-center justify-start gap-8 hover:bg-slate-500 transition-all animate-pulse outline"
+                      : " flex flex-row items-center justify-start gap-8 hover:bg-slate-500 transition-all"
+                  }
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -332,7 +354,11 @@ const Register = () => {
                   </svg>
                   Sign in with Google
                 </Button>
-                <Button className={excistAnimate? " animate-pulse outline":""} onClick={() => navigate("/login")} variant="firth">
+                <Button
+                  className={excistAnimate ? " animate-pulse outline" : ""}
+                  onClick={() => navigate("/login")}
+                  variant="firth"
+                >
                   Already have a user?
                 </Button>
               </form>

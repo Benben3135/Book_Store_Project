@@ -1,8 +1,8 @@
 import express from "express"
-import {createNewUser} from "./userCont"
+import {register,check} from "./userCont"
 const router = express.Router()
 
-router.get("", () =>{})
-.post("/create-newuser" , createNewUser)
+router.get("", check)
+.post("", register) 
 
 export default router;

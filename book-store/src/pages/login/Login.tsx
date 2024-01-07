@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { noScroll } from "../../features/layout/isScrollSlice";
-import { setNewUserEmail, setNewUserID, setNewUserdisplayName } from "../../features/user/userSlice";
+import { setNewUserEmail, setNewUserID, setNewUserdisplayName , setNewUserImg } from "../../features/user/userSlice";
 import { auth, provider } from "../../firebase";
 
 const Login = () => {
@@ -30,7 +30,8 @@ const Login = () => {
 interface User{
   uid:string,
   email:string,
-  displayName:string
+  displayName:string,
+  img: string
 }
 
   const handleGoogleLogin = () => {
@@ -38,11 +39,12 @@ interface User{
       .then((result) => {
         console.log("result is", result);
 
-        if (result && result.user.uid && result.user.email && result.user.displayName) {
+        if (result && result.user.uid && result.user.email && result.user.displayName && result.user.photoURL) {
           const user:User = {
             uid: result.user.uid,
             email: result.user.email,
             displayName: result.user.displayName,
+            img: result.user.photoURL
           }
           sendUserToRedux(user)
         }
@@ -56,6 +58,7 @@ interface User{
     dispatch(setNewUserID(user.uid))
     dispatch((setNewUserEmail(user.email)))
     dispatch((setNewUserdisplayName(user.displayName)))
+    dispatch((setNewUserImg(user.img)))
     navigate("/homePage")
   }
 
