@@ -23,9 +23,9 @@ export async function createBook(req: express.Request, res: express.Response) {
     try {
 
         const { title, author, pageNum, publisher, description, image, review, likes } = req.body
-        if (!title || !author || !image) throw new Error("no data in FUNCTION createAllBook in FILE booksCtrl.ts")
+        if (!title || !author || !image) throw new Error("no data in FUNCTION createAllBook in file booksCtrl.ts")
 
-        const query = `INSERT INTO books (title, author, image) VALUES ("${title}", '${author}', '${image}');`;
+        const query = `INSERT INTO books (title, author, pageNum, publisher, description, image, review, likes) VALUES ('${title}', '${author}', '${pageNum}', '${publisher}', '${description}', '${image}', '${review}', '${likes})';`;
         connection.query(query, (err, results) => {
             try {
                 if (err) throw err;
