@@ -22,10 +22,10 @@ export async function getAllBooks(req: express.Request, res: express.Response) {
 export async function createBook(req: express.Request, res: express.Response) {
     try {
 
-        const { title, author, pageNum, publisher, description, image, review, likes } = req.body
+        const { title, author, pageNum, publisher, description, image, likes } = req.body
         if (!title || !author || !image) throw new Error("no data in FUNCTION createAllBook in file booksCtrl.ts")
 
-        const query = `INSERT INTO books (title, author, pageNum, publisher, description, image, review, likes) VALUES ('${title}', '${author}', '${pageNum}', '${publisher}', '${description}', '${image}', '${review}', '${likes})';`;
+        const query = `INSERT INTO books (title, author, pageNum, publisher, description, image, likes) VALUES ('${title}', '${author}', ${pageNum}, '${publisher}', '${description}', '${image}', ${likes});`;
         connection.query(query, (err, results) => {
             try {
                 if (err) throw err;

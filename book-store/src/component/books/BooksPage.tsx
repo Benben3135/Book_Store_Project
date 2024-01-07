@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import BookCard, { Book } from './BookCard'
 import { useNavigate } from 'react-router-dom'
 import Debouncing from '../debouncing/Debouncing'
+import axios from 'axios';
 
 const BooksPage = () => {
     const [bookState, setBooks] = useState<Book[]>([])
@@ -11,7 +12,12 @@ const BooksPage = () => {
     const handelGetAllBooks = async () => {
         try {
             //!use axios to get the book list from DB
+            const booksDb = await axios.get("/api/books/getAllBooks")
+            if (!booksDb) throw new Error("At handelGetAllBooks: no books in DB");
+           
             //!put the list in bookState and filterBooksState
+            setBooks(booksDb)
+            setFilterBooks(booksDb)
         } catch (error) {
             console.error(error)
         }
