@@ -14,7 +14,7 @@ app.use(cors());
 
 // Require your routes
 import userRoutes from "./API/users/userRoutes"
-import booksRoutes from "./API/booksRoutes"
+import booksRoutes from "./API/books/booksRoutes"
 
 app.use('/API/books', booksRoutes);
 app.use("/API/users", userRoutes)
