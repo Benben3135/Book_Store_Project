@@ -4,7 +4,7 @@ const TestPage = () => {
 
     const testRouter = async () => {
         try {
-          const check = await axios.get('/api/check');
+          const check = await axios.get('http://localhost:4000/api/check');
           console.log("check:", check.data);
         } catch (error) {
           console.error("Error fetching data:", error);

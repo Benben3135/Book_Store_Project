@@ -1,6 +1,6 @@
 import TypingAnimation from "@/components/animations/TypingAnimation ";
 import axios from "axios";
-import {register} from "../../api/users/register"
+import { register } from "../../api/users/register";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -63,7 +63,7 @@ const Register = () => {
         .then((userCredential) => {
           // Registration success
           console.log("Registration successful", userCredential);
-          register(userCredential.user)
+          register(userCredential.user);
           // navigate("/homePage");
         })
         .catch((error) => {
@@ -81,8 +81,7 @@ const Register = () => {
         // Google sign-in success
         console.log("result is", result);
         if (result) {
-         registerUser(result)
-        //  navigate("/homePage");
+          registerUser(result);
         }
       })
       .catch((error) => {
@@ -90,10 +89,11 @@ const Register = () => {
       });
   };
 
-  const registerUser = async (result:any) => {
-    console.log("registering user:", result.user)
-    await register(result.user)
-  }
+  const registerUser = async (result: any) => {
+    console.log("registering user:", result.user);
+    await register(result.user);
+    navigate("/homePage");
+  };
 
   const checkPass = () => {
     if (password === verPassword) {

@@ -6,6 +6,7 @@ import Logo from "../icons/svg/Logo";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { userSelector } from "@/features/user/userSlice";
 import { useEffect, useState } from "react";
+import { getActiveUserData } from "@/api/users/getActiveUserData";
 
 const Navbar = () => {
   interface UserData {
@@ -24,6 +25,11 @@ const Navbar = () => {
     setUserData(user);
   }, [user]);
   console.log(user);
+
+if(isUserValue){
+  getActiveUserData();
+}
+  
 
   return (
     <div className="bg-gradient-to-r from-slate-400 to-gray-200 sticky z-50 top-0 inset-x-0 h-12 w-screen shadow-md">

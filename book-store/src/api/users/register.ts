@@ -16,8 +16,7 @@ export const register = async (result: any) => {
     }
 
     const data = await response.json();
-    console.log("Data received from server:", data);
-    // Handle the response data or navigate as needed
+    console.log("Data received from server:", data)
   } catch (error) {
     console.error("Error making request to server:", error);
     // Handle the error, e.g., display a message to the user
