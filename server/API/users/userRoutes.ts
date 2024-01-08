@@ -1,8 +1,9 @@
 import express from "express"
-import {register,check} from "./userCont"
+import { register,getActiveUserData } from "./userCont";
 const router = express.Router()
 
-router.get("", check)
+router
+.get("/cookie" , getActiveUserData)
 .post("", register) 
 
 export default router;
