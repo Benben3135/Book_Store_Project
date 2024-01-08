@@ -1,4 +1,4 @@
-import { Book } from "../component/books/BookCard";
+import { Book } from "../components/books/BookCard";
 
 export const books:Book[] = [
     {

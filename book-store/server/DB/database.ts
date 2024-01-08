@@ -1,4 +1,4 @@
-import mysql from "mysql2"
+import  mysql  from 'mysql2';
 
 const sqlpassword = process.env.SQLPASSWORD;
 
