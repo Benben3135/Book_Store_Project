@@ -1,6 +1,6 @@
 import TypingAnimation from "@/components/animations/TypingAnimation ";
 import axios from "axios";
-import {register} from "../../../api/users/register"
+import {register} from "../../api/users/register"
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -63,7 +63,8 @@ const Register = () => {
         .then((userCredential) => {
           // Registration success
           console.log("Registration successful", userCredential);
-          navigate("/homePage");
+          register(userCredential.user)
+          // navigate("/homePage");
         })
         .catch((error) => {
           console.error("Error during registration", error);
@@ -81,6 +82,7 @@ const Register = () => {
         console.log("result is", result);
         if (result) {
          registerUser(result)
+        //  navigate("/homePage");
         }
       })
       .catch((error) => {
@@ -89,7 +91,8 @@ const Register = () => {
   };
 
   const registerUser = async (result:any) => {
-    await register(result)
+    console.log("registering user:", result.user)
+    await register(result.user)
   }
 
   const checkPass = () => {
@@ -99,16 +102,6 @@ const Register = () => {
       setPassMatch(false);
     }
   };
-
-  const handleCheck = async () => {
-    try {
-      const data = await check();
-      console.log(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  handleCheck()
 
   return (
     <div

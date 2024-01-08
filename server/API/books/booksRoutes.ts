@@ -1,5 +1,4 @@
 import express from "express"
-<<<<<<< HEAD:book-store/server/API/books/booksRoutes.ts
 import { createBook, getAllBooks } from "./booksCont"
 
 const router = express.Router()
@@ -7,13 +6,6 @@ const router = express.Router()
 router
 .get("", getAllBooks)  //ALL book
 .post("", createBook)  
-=======
-const router = express.Router()
-
-router
-.get("", () => {})  //ALL
-// .post("", creatAllBooks)  //tamar
->>>>>>> development:book-store/server/API/booksRoutes.ts
 
 
 //good routing example :/api/users

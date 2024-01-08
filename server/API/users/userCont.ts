@@ -19,6 +19,7 @@ export async function register(req: express.Request, res: express.Response) {
 export async function check(req: express.Request, res: express.Response) {
     try {
         // Your check logic here
+        console.log("i got a check request")
         res.status(200).send({ message: "Server is running and check passed" });
     } catch (error: any) {
         console.error("Error in check:", error);

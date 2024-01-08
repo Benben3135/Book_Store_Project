@@ -1,7 +1,6 @@
-import  express  from 'express';
-// import { books } from './../src/util/books';
+import express from 'express';
+// import { books } from './util/books';
 require('dotenv').config();
-import cors from "cors"
 
 
 const app = express();
@@ -9,17 +8,19 @@ const PORT = process.env.PORT || 4000;
 
 // Middleware
 app.use(express.json());
-app.use(cors());
+
 
 
 // Require your routes
 import userRoutes from "./API/users/userRoutes"
 import booksRoutes from "./API/books/booksRoutes"
 
-app.use('/API/books', booksRoutes);
-app.use("/API/users", userRoutes)
+app.use('/api/books', booksRoutes);
+app.use('/api/users', userRoutes)
 
-
+app.get('api/check', (req, res) => {
+    res.status(200).send({ message: "Server is running and check passed" });
+});
 
 
 app.listen(PORT, () => {
