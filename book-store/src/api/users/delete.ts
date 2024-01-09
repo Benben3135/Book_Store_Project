@@ -1,12 +1,14 @@
 import axios from "axios";
 
-export const getActiveUserData = async () => {
+export const deleteUser = async (uid: any) => {
   try {
-    const response = await fetch("/api/users/cookie", {
-      method: "GET",
+    console.log("you are sending:" , uid)
+    const response = await fetch("/api/users/delete", {
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify({uid}),
     });
 
     if (!response.ok) {
@@ -14,9 +16,9 @@ export const getActiveUserData = async () => {
     }
 
     const data = await response.json();
-    console.log("i got a cookie baby!" , data);
-    return(data)
+    return data;
   } catch (error) {
     console.error("Error making request to server:", error);
+    // Handle the error, e.g., display a message to the user
   }
 };
