@@ -10,21 +10,19 @@ const saltRounds = 10;
 export async function register(req: express.Request, res: express.Response) {
     try {
         const userData = req.body;
-        console.log(userData)
         const uid = userData.uid;
         const email = userData.email;
         const name = userData.displayName;
         const img = userData.photoURL;
-        console.log(uid, email, name, img)
 
-        if (!uid || !email || !name || !img) throw new Error("no data")
+        if (!uid || !email || !name || !img) throw new Error("no data");
 
-        const secret = process.env.SECRET
-        if (!secret) throw new Error("no secret")
+        const secret = process.env.SECRET;
+        if (!secret) throw new Error("no secret");
 
-        const checkQuery = `SELECT * FROM book_store.users WHERE uid = "${uid}";`
+        const checkQuery = 'SELECT * FROM book_store.users WHERE uid = ?';
 
-        connection.query(checkQuery, (err, results) => {
+        connection.query(checkQuery, [uid], (err, results) => {
             if (err) throw err;
             //@ts-ignore
             if (results && results.length > 0) {
@@ -37,13 +35,13 @@ export async function register(req: express.Request, res: express.Response) {
                 res.send({ ok: true, results })
             } else {
                 console.log("user not excist");
-                const query = `INSERT INTO book_store.users (uid,name,email,img,password) VALUES ('${uid}','${name}','${email}','${img}',"");`;
-                connection.query(query, (err, resultsAdd) => {
+                const insertQuery = 'INSERT INTO book_store.users (uid, name, email, img, password) VALUES (?, ?, ?, ?, "")';
+                connection.query(insertQuery, [uid, name, email, img], (err2, resultsAdd) => {
                     try {
                         if (err) throw err;
                         //@ts-ignore
                         if (resultsAdd.affectedRows) { //@ts-ignore
-                            const queryUser = `SELECT * FROM book_store.users WHERE WHERE (uid = ${uid});`
+                            const queryUser = `SELECT * FROM book_store.users WHERE (uid = ${uid});`
                             connection.query(queryUser, (err2, results) => {
                                 if (err2) throw err2;
                                 //@ts-ignore
@@ -57,7 +55,7 @@ export async function register(req: express.Request, res: express.Response) {
                             })
                         }
                         else {
-                           res.status(401).send({ok:false , message: "register function failed!"})
+                            res.status(401).send({ ok: false, message: "register function failed!" })
                         }
 
                     } catch (error) {
@@ -134,7 +132,7 @@ export async function login(req: express.Request, res: express.Response) {
         const secret = process.env.SECRET
         if (!secret) throw new Error("no secret!")
 
-        const query = `SELECT * FROM book_store.users WHERE (uid = ${uid});`
+        const query = `SELECT * FROM book_store.users WHERE uid = "${uid}";`
 
         connection.query(query, (err, results) => {
             if (err) throw err;
@@ -178,11 +176,11 @@ export async function changeUserName(req: express.Request, res: express.Response
     connection.query(query, (err, results) => {
         if (err) throw err;
         //@ts-ignore
-            const queryUser = `SELECT * FROM book_store.users WHERE (uid = '${uid}');`;
-            connection.query(queryUser, (err2, results) => {
-                if (err2) throw err2;
-                res.send({ ok: true, results })
-            })
-       
+        const queryUser = `SELECT * FROM book_store.users WHERE (uid = '${uid}');`;
+        connection.query(queryUser, (err2, results) => {
+            if (err2) throw err2;
+            res.send({ ok: true, results })
+        })
+
     })
 }
