@@ -6,6 +6,8 @@ import RightSideBar from "@/components/RightSideBar/RightSideBar";
 import Footer from "@/components/footer/Footer";
 import { useSelector } from "react-redux";
 import {categorieSelector} from "../../features/categories/categorieSlice"
+import {initializeSql} from "../../api/insertData/initializeSql"
+
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -17,6 +19,10 @@ const HomePage = () => {
     setActiveCat(ActiveCatRedux)
   },[ActiveCatRedux])
 
+
+  useEffect(() => {
+    initializeSql()
+  },[])
 
   useEffect(() => {
     dispatch(scroll()); // Dispatch the scroll action to auto

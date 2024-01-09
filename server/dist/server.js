@@ -15,22 +15,12 @@ app.use(express_1.default.json());
 app.use(cors_1.default({
     origin: 'http://localhost:5173',
 }));
-app.use(cookieParser({
-    origin: 'http://localhost:5173',
-}));
 app.use(cookieParser());
-const userRoutes_1 = __importDefault(require("./API/users/userRoutes"));
-const booksRoutes_1 = __importDefault(require("./API/books/books/booksRoutes"));
+const booksRoutes_1 = __importDefault(require("./API/books/booksRoutes"));
+const initialRouter_1 = __importDefault(require("./API/initialize/initialRouter"));
 app.use('/api/books', booksRoutes_1.default);
-app.use('/api/users', userRoutes_1.default);
 app.use('/api/books', booksRoutes_1.default);
-app.use('/api/users', userRoutes_1.default);
-app.get('/api/check', (req, res) => {
-    res.status(200).json({ message: "Server is running and check passed" });
-});
-app.get('/api/check', (req, res) => {
-    res.status(200).json({ message: "Server is running and check passed" });
-});
+app.use("/api/initialize", initialRouter_1.default);
 app.listen(PORT, () => {
     console.log(`Server running on port: ${PORT}`);
 });
