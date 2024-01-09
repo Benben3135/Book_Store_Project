@@ -1,8 +1,12 @@
 import express from "express"
-import {register,check} from "./userCont"
+import { register,getActiveUserData, login, deleteUser ,changeUserName } from "./userCont";
 const router = express.Router()
 
-router.get("", check)
-.post("", register) 
+router
+.get("/cookie" , getActiveUserData)
+.post("", register)
+.post("/login", login)
+.delete("/delete", deleteUser)
+.patch("/name", changeUserName)
 
 export default router;

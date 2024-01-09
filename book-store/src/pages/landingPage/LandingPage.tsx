@@ -5,6 +5,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { noScroll } from "../../features/layout/isScrollSlice";
+import {thereNoUser} from "../../features/user/isUserSlice"
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -12,7 +13,8 @@ const LandingPage = () => {
 
   useEffect(() => {
     dispatch(noScroll()); // Dispatch the scroll action
-  }, [dispatch]);
+    dispatch(thereNoUser())
+  }, []);
 
   return (
     <div className=" h-full w-full bg-gradient-to-r from-purple-100 to-blue-200 group">

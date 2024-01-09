@@ -1,7 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import cookieParser from 'cookie-parser';
-
+import cookieParser = require("cookie-parser")
 
 // import { books } from './util/books';
 require('dotenv').config();
@@ -15,17 +14,26 @@ app.use(express.json());
 app.use(cors({
     origin: 'http://localhost:5173',
 }));
+app.use(cookieParser({
+    origin: 'http://localhost:5173',
+}));
 app.use(cookieParser());
 
 
 
-import userRoutes from "./API/users/userRoutes"
-import booksRoutes from "./API/books/booksRoutes"
 
+import userRoutes from "./API/users/userRoutes"
+import booksRoutes from "./API/books/books/booksRoutes"
+
+app.use('/api/books', booksRoutes);
+app.use('/api/users', userRoutes);
 app.use('/api/books', booksRoutes);
 app.use('/api/users', userRoutes);
 
 
+app.get('/api/check', (req, res) => {
+    res.status(200).json({ message: "Server is running and check passed" });
+});
 app.get('/api/check', (req, res) => {
     res.status(200).json({ message: "Server is running and check passed" });
 });

@@ -5,6 +5,8 @@ import LandingPage from "./pages/landingPage/LandingPage";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import HomePage from "./pages/homepage/Homepage"
+import TestPage from "./pages/test/TestPage";
+import Profile from "./pages/profile/Profile";
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/homePage" element={<HomePage/>}/>
+        <Route path="/test" element={<TestPage/>}/>
+        <Route path="/profile" element={<Profile/>}/>
       </Routes>
     </BrowserRouter>
   );

@@ -6,6 +6,31 @@ import Logo from "../icons/svg/Logo";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { userSelector } from "@/features/user/userSlice";
 import { useEffect, useState } from "react";
+import { getActiveUserData } from "@/api/users/getActiveUserData";
+import {
+  Cloud,
+  CreditCard,
+  Github,
+  Keyboard,
+  LifeBuoy,
+  LogOut,
+  Mail,
+  MessageSquare,
+  Plus,
+  PlusCircle,
+  Settings,
+  User,
+  UserPlus,
+  Users,
+} from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
   interface UserData {
@@ -19,11 +44,28 @@ const Navbar = () => {
   const isUserValue = useSelector(isUserSelector);
   const user: UserData = useSelector(userSelector);
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [img, setImg] = useState("");
+  const [uid, setUid] = useState("");
 
   useEffect(() => {
     setUserData(user);
   }, [user]);
-  console.log(user);
+
+  useEffect(() => {
+    userDataFromCookie();
+  }, []);
+
+  const userDataFromCookie = async () => {
+    const data = await getActiveUserData();
+    console.log(data.userData);
+    const userData = data.userData;
+    setEmail(userData.email);
+    setName(userData.name);
+    setImg(userData.img);
+    setUid(userData.uid);
+  };
 
   return (
     <div className="bg-gradient-to-r from-slate-400 to-gray-200 sticky z-50 top-0 inset-x-0 h-12 w-screen shadow-md">
@@ -33,10 +75,24 @@ const Navbar = () => {
             <Logo width={2} />
           </div>
           {userData && (
-            <Avatar className="mr-8 hover:shadow-2xl transition-all">
-              <AvatarImage src={userData.img} alt="avatarIMG" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                {" "}
+                <Avatar className="mr-8 hover:shadow-2xl hover:scale-110 cursor-pointer transition-all">
+                  <AvatarImage src={img} alt="avatarIMG" />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuLabel>{name}</DropdownMenuLabel>
+                <DropdownMenuLabel className=" font-serif font-light">{email}</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => navigate(`/profile?uid=${uid}`)}>Profile</DropdownMenuItem>
+                <DropdownMenuItem>Billing</DropdownMenuItem>
+                <DropdownMenuItem>Team</DropdownMenuItem>
+                <DropdownMenuItem>Subscription</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           )}
         </div>
       ) : (

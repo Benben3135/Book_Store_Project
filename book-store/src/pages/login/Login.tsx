@@ -8,8 +8,14 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { noScroll } from "../../features/layout/isScrollSlice";
-import { setNewUserEmail, setNewUserID, setNewUserdisplayName , setNewUserImg } from "../../features/user/userSlice";
+import {
+  setNewUserEmail,
+  setNewUserID,
+  setNewUserdisplayName,
+  setNewUserImg,
+} from "../../features/user/userSlice";
 import { auth, provider } from "../../firebase";
+import {login} from "../../api/users/login"
 
 const Login = () => {
   const [email, setEmail] = useState<string>("");
@@ -27,26 +33,33 @@ const Login = () => {
     console.log(emailWrong);
   }, [emailWrong]);
 
-interface User{
-  uid:string,
-  email:string,
-  displayName:string,
-  img: string
-}
+  interface User {
+    uid: string;
+    email: string;
+    displayName: string;
+    img: string;
+  }
 
   const handleGoogleLogin = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
         console.log("result is", result);
 
-        if (result && result.user.uid && result.user.email && result.user.displayName && result.user.photoURL) {
-          const user:User = {
+        if (
+          result &&
+          result.user.uid &&
+          result.user.email &&
+          result.user.displayName &&
+          result.user.photoURL
+        ) {
+          const user: User = {
             uid: result.user.uid,
             email: result.user.email,
             displayName: result.user.displayName,
-            img: result.user.photoURL
-          }
-          sendUserToRedux(user)
+            img: result.user.photoURL,
+          };
+          sendUserToRedux(user);
+          loginUser(user);
         }
       })
       .catch((error) => {
@@ -54,20 +67,30 @@ interface User{
       });
   };
 
-  const sendUserToRedux = (user:User) => {
-    dispatch(setNewUserID(user.uid))
-    dispatch((setNewUserEmail(user.email)))
-    dispatch((setNewUserdisplayName(user.displayName)))
-    dispatch((setNewUserImg(user.img)))
-    navigate("/homePage")
-  }
+  const sendUserToRedux = (user: User) => {
+    dispatch(setNewUserID(user.uid));
+    dispatch(setNewUserEmail(user.email));
+    dispatch(setNewUserdisplayName(user.displayName));
+    dispatch(setNewUserImg(user.img));
+  };
 
   const handleEmailLogin = (email: string, password: string) => {
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        if(userCredential){
-          console.log(userCredential);
-          
+      .then((result) => {
+        if (
+          result &&
+          result.user.uid &&
+          result.user.email &&
+          result.user.displayName &&
+          result.user.photoURL
+        ) {
+          const user: User = {
+            uid: result.user.uid,
+            email: result.user.email,
+            displayName: result.user.displayName,
+            img: result.user.photoURL,
+          };
+          loginUser(user);
         }
       })
       .catch((error) => {
@@ -75,17 +98,22 @@ interface User{
       });
   };
 
+  const loginUser = async (user: any) => {
+    await login(user);
+    navigate("/homePage");
+  };
+
   return (
     <div className=" h-full w-full bg-gradient-to-r from-purple-100 to-blue-200 group overflow-hidden flex flex-col justify-center items-center">
       <motion.div
-       initial={{y:100, opacity:0}}
-       animate={{y:0,opacity:1}}
-       transition={{duration:0.2}}
-      className="bg-gradient-to-r from-gray-200 to-sky-200 w-96 h-fit p-3 rounded-lg shadow-lg overflow-hidden">
+        initial={{ y: 100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.2 }}
+        className="bg-gradient-to-r from-gray-200 to-sky-200 w-96 h-fit p-3 rounded-lg shadow-lg overflow-hidden"
+      >
         <div className="flex flex-col items-center justify-start">
           <h1 className=" text-3xl font-extrabold pt-4">LOGIN</h1>
-          <div
-          className=" h-fit w-3/4 pt-8">
+          <div className=" h-fit w-3/4 pt-8">
             <form
               className=" flex flex-col gap-4 py-4"
               onSubmit={(e) => {
@@ -114,7 +142,6 @@ interface User{
                 </div>
               ) : null}
 
-              
               <Button
                 type="submit"
                 className=" hover:scale-105 hover:font-extrabold  transition-all ease-in-out "
