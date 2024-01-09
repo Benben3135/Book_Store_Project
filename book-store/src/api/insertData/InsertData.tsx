@@ -1,10 +1,21 @@
 import { books } from "../../util/books"
-import { Book } from '../../component/books/BookCard';
 import axios from "axios";
 
-const InsertData =  (books: Book[]) => {
+interface Book {
+    title: string,
+    author: string,
+    pageNum: number,
+    publisher: string,
+    description: string,
+    image: string,
+    likes: number,
+}
+
+const booksList = books
+
+const InsertData =  (booksList: Book[]) => {
 try {
-      books.forEach( async (book) => {
+    booksList.forEach( async (book) => {
         await axios.post("/api/books/createBook", book)
     })
     console.log("book insert successfully")
