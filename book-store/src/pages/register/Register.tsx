@@ -23,13 +23,15 @@ import { useNavigate } from "react-router-dom";
 import { scroll } from "../../features/layout/isScrollSlice";
 import { auth, provider } from "../../firebase";
 import { Check, X } from "lucide-react";
+import {thereNoUser} from "../../features/user/isUserSlice"
 
 const Register = () => {
   const dispatch = useDispatch();
   //allows a scrolling movement
   useEffect(() => {
     dispatch(scroll()); // Dispatch the scroll action
-  }, [dispatch]);
+    dispatch(thereNoUser())
+  }, []);
 
   //use states
   const [email, setEmail] = useState<string>("");
