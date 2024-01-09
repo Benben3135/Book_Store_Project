@@ -11,11 +11,12 @@ const BooksPage = () => {
 
     const handelGetAllBooks = async () => {
         try {
-            //!use axios to get the book list from DB
-            const booksDb = await axios.get("/api/books/getAllBooks")
+            //use axios to get the book list from DB
+            const response = await axios.get("/api/books/getAllBooks")
+            const booksDb = response.data
             if (!booksDb) throw new Error("At handelGetAllBooks: no books in DB");
            
-            //!put the list in bookState and filterBooksState
+            //put the list in bookState and filterBooksState
             setBooks(booksDb)
             setFilterBooks(booksDb)
         } catch (error) {
