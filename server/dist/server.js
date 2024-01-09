@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
-const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const cookieParser = require("cookie-parser");
 // import { books } from './util/books';
 require('dotenv').config();
 const app = express_1.default();
@@ -15,11 +15,19 @@ app.use(express_1.default.json());
 app.use(cors_1.default({
     origin: 'http://localhost:5173',
 }));
-app.use(cookie_parser_1.default());
+app.use(cookieParser({
+    origin: 'http://localhost:5173',
+}));
+app.use(cookieParser());
 const userRoutes_1 = __importDefault(require("./API/users/userRoutes"));
-const booksRoutes_1 = __importDefault(require("./API/books/booksRoutes"));
+const booksRoutes_1 = __importDefault(require("./API/books/books/booksRoutes"));
 app.use('/api/books', booksRoutes_1.default);
 app.use('/api/users', userRoutes_1.default);
+app.use('/api/books', booksRoutes_1.default);
+app.use('/api/users', userRoutes_1.default);
+app.get('/api/check', (req, res) => {
+    res.status(200).json({ message: "Server is running and check passed" });
+});
 app.get('/api/check', (req, res) => {
     res.status(200).json({ message: "Server is running and check passed" });
 });
