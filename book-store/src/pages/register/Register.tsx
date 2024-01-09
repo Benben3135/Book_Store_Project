@@ -23,13 +23,15 @@ import { useNavigate } from "react-router-dom";
 import { scroll } from "../../features/layout/isScrollSlice";
 import { auth, provider } from "../../firebase";
 import { Check, X } from "lucide-react";
+import {thereNoUser} from "../../features/user/isUserSlice"
 
 const Register = () => {
   const dispatch = useDispatch();
   //allows a scrolling movement
   useEffect(() => {
     dispatch(scroll()); // Dispatch the scroll action
-  }, [dispatch]);
+    dispatch(thereNoUser())
+  }, []);
 
   //use states
   const [email, setEmail] = useState<string>("");
@@ -49,6 +51,9 @@ const Register = () => {
   useEffect(() => {
     setShowTick(false);
   }, []);
+
+
+
 
   //get the email and password and register
 
@@ -113,7 +118,7 @@ const Register = () => {
         <motion.div
           initial={{ opacity: 0, scale: 0 }}
           whileInView={{ y: -100, opacity: 1, scale: 1 }}
-          className=" flex flex-row items-center justify-center pt-12 w-full h-full"
+          className=" flex flex-row items-center justify-center pt-12 w-full h-full gap-8"
         >
           <h1 className=" text-5xl sm:text-6xl tracking-tight px-4 font-bold text-gray-800 text-center">
             Welcome to a world{" "}

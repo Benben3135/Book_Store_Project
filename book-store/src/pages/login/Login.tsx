@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { noScroll } from "../../features/layout/isScrollSlice";
+import {thereNoUser} from "../../features/user/isUserSlice"
 import {
   setNewUserEmail,
   setNewUserID,
@@ -27,7 +28,8 @@ const Login = () => {
 
   useEffect(() => {
     dispatch(noScroll()); // Dispatch the scroll action
-  }, [dispatch]);
+    dispatch(thereNoUser());
+  }, []);
 
   useEffect(() => {
     console.log(emailWrong);

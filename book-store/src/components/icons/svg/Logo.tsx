@@ -13,7 +13,7 @@ const Logo = ({ width }: LogoProps) => {
   return (
     <div
       style={{ width: `${widthState}rem` }}
-      className="flex flex-row justify-center items-center"
+      className="flex flex-row justify-center items-center hover:scale-110 transition-all cursor-pointer"
     >
       {/* TODO: change the logo for our logo */}
       <svg

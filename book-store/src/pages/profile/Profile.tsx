@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Frown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import {changeNameServer} from "../../api/users/changeName"
+import { changeNameServer } from "../../api/users/changeName";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -45,7 +45,6 @@ const Profile = () => {
   useEffect(() => {
     userDataFromCookie();
   }, []);
- 
 
   const userDataFromCookie = async () => {
     const data = await getActiveUserData();
@@ -63,10 +62,10 @@ const Profile = () => {
   };
   const changeName = async () => {
     const newNameChange = newName;
-    const result = await changeNameServer(newNameChange , uid);
-    userDataFromCookie()
-    console.log(result)
-  }
+    const result = await changeNameServer(newNameChange, uid);
+    userDataFromCookie();
+    console.log(result);
+  };
 
   return (
     <div className=" h-full w-full bg-gradient-to-r from-sky-200 to-purple-300 flex flex-col justify-center items-center">
@@ -80,7 +79,7 @@ const Profile = () => {
         <h2 className=" font-light text-lg text-slate-700">{email}</h2>
         <Dialog>
           <DialogTrigger asChild>
-          <Button variant="firth">Change display name</Button>
+            <Button variant="firth">Change display name</Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
@@ -105,7 +104,9 @@ const Profile = () => {
               </div>
             </div>
             <DialogClose>
-              <Button type="submit" onClick={() => changeName()}>Save changes</Button>
+              <Button type="submit" onClick={() => changeName()}>
+                Save changes
+              </Button>
             </DialogClose>
           </DialogContent>
         </Dialog>
@@ -131,7 +132,9 @@ const Profile = () => {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
-        <h3 className=" text-muted-foreground pt-8">uid: {uid}</h3>
+        <div className=" flex flex-row justify-center items-center bg-slate-400 rounded-xl h-8 mt-8 p-2">
+          <h3 className=" text-muted-foreground">uid: {uid}</h3>
+        </div>
       </motion.div>
     </div>
   );

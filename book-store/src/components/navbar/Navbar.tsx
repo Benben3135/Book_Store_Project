@@ -22,6 +22,7 @@ import {
   User,
   UserPlus,
   Users,
+  LogOutIcon
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -49,12 +50,14 @@ const Navbar = () => {
   const [img, setImg] = useState("");
   const [uid, setUid] = useState("");
 
+
   useEffect(() => {
     setUserData(user);
   }, [user]);
 
   useEffect(() => {
     userDataFromCookie();
+    setUserData(user);
   }, []);
 
   const userDataFromCookie = async () => {
@@ -71,7 +74,7 @@ const Navbar = () => {
     <div className="bg-gradient-to-r from-slate-400 to-gray-200 sticky z-50 top-0 inset-x-0 h-12 w-screen shadow-md">
       {isUserValue ? (
         <div className=" w-full flex flex-row h-full items-center justify-between">
-          <div className="pl-4 top-0 left-4">
+          <div onClick={() => navigate("/homePage")} className="pl-4 top-0 left-4">
             <Logo width={2} />
           </div>
           {userData && (
@@ -87,17 +90,16 @@ const Navbar = () => {
                 <DropdownMenuLabel>{name}</DropdownMenuLabel>
                 <DropdownMenuLabel className=" font-serif font-light">{email}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => navigate(`/profile?uid=${uid}`)}>Profile</DropdownMenuItem>
-                <DropdownMenuItem>Billing</DropdownMenuItem>
-                <DropdownMenuItem>Team</DropdownMenuItem>
-                <DropdownMenuItem>Subscription</DropdownMenuItem>
+                <DropdownMenuItem className=" cursor-pointer" onClick={() => navigate(`/profile?uid=${uid}`)}><User/>Profile</DropdownMenuItem>
+                <DropdownMenuItem className=" cursor-pointer bg-red-500 text-white" onClick={() => navigate(`/`)}><LogOutIcon/>Log out</DropdownMenuItem>
+
               </DropdownMenuContent>
             </DropdownMenu>
           )}
         </div>
       ) : (
         <div className=" w-full flex flex-row h-full items-center justify-between">
-          <div className="pl-4 top-0 left-4">
+          <div onClick={() => navigate("/")} className="pl-4 top-0 left-4">
             <Logo width={2} />
           </div>
           <div className=" lg:w-fit w-full justify-between lg:justify-end gap-4 flex flex-row px-8">
