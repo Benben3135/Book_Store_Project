@@ -1,4 +1,5 @@
 export enum Categories {
+    ALL = "all",
     HORROR = "horror",
     FANTASY = "fantasy",
     SCIFI = "science fiction",

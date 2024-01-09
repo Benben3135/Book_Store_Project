@@ -8,13 +8,13 @@ import { Categories } from "../../util/categories"; // Replace with the actual p
 
 const RightSideBar = () => {
   const allCategories: string[] = Object.values(Categories);
-  console.log(allCategories);
   const dispatch = useDispatch();
 
   const handleCategoryClick = (category: string) => {
-    console.log(`Category clicked: ${category}`);
     dispatch(setActiveCategorie(category))
   };
+  const activeCategorie = useSelector(categorieSelector)
+  console.log(activeCategorie)
 
   return (
     <motion.div
@@ -29,7 +29,7 @@ const RightSideBar = () => {
           animate={{ y: 0, opacity: 1 }}
           transition={{duration: index/25}}
           onClick={() => handleCategoryClick(category)}
-          className="shadow-lg flex-row justify-center items-center flex-1 w-full hover:shadow-xl group transition-all cursor-pointer"
+          className={category === activeCategorie? "flex-row justify-center items-center flex-1 w-full shadow-xl group transition-all cursor-pointer bg-gray-400":"shadow-lg flex-row justify-center items-center flex-1 w-full hover:shadow-xl group transition-all cursor-pointer"}
            key={index}>
             <h1 className= "text-zinc-100 font-semibold text-center group-hover:scale-125 transition-all">{category}</h1>
           </motion.div>

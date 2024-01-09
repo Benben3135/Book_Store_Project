@@ -52,6 +52,9 @@ const Register = () => {
     setShowTick(false);
   }, []);
 
+
+
+
   //get the email and password and register
 
   const handleRegister = (email: string, password: string) => {
@@ -115,7 +118,7 @@ const Register = () => {
         <motion.div
           initial={{ opacity: 0, scale: 0 }}
           whileInView={{ y: -100, opacity: 1, scale: 1 }}
-          className=" flex flex-row items-center justify-center pt-12 w-full h-full"
+          className=" flex flex-row items-center justify-center pt-12 w-full h-full gap-8"
         >
           <h1 className=" text-5xl sm:text-6xl tracking-tight px-4 font-bold text-gray-800 text-center">
             Welcome to a world{" "}
