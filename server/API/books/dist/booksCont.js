@@ -43,7 +43,7 @@ function getAllBooks(req, res) {
         var query;
         return __generator(this, function (_a) {
             try {
-                query = "SELECT * FROM books";
+                query = "SELECT * FROM book_store.books";
                 database_1["default"].query(query, function (err, results) {
                     try {
                         if (err)

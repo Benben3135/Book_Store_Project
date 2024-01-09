@@ -3,7 +3,7 @@ import connection from '../../DB/database'
 
 export async function getAllBooks(req: express.Request, res: express.Response) {
     try {
-        const query = "SELECT * FROM books"
+        const query = "SELECT * FROM book_store.books"
         connection.query(query, (err, results) => {
             try {
                 if (err) throw err

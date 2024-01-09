@@ -4,10 +4,14 @@ import { useEffect } from "react";
 import {thereUser} from "../../features/user/isUserSlice"
 import RightSideBar from "@/components/RightSideBar/RightSideBar";
 import Footer from "@/components/footer/Footer";
-
+import {initializeSql} from "../../api/insertData/initializeSql"
 
 const HomePage = () => {
   const dispatch = useDispatch();
+  useEffect(() => {
+    initializeSql()
+  },[])
+
   useEffect(() => {
     dispatch(scroll()); // Dispatch the scroll action to auto
     dispatch(thereUser()) // Dispatch the user to true

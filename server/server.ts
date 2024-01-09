@@ -14,29 +14,19 @@ app.use(express.json());
 app.use(cors({
     origin: 'http://localhost:5173',
 }));
-app.use(cookieParser({
-    origin: 'http://localhost:5173',
-}));
+
 app.use(cookieParser());
 
 
 
 
 import userRoutes from "./API/users/userRoutes"
-import booksRoutes from "./API/books/books/booksRoutes"
+import booksRoutes from "./API/books/booksRoutes"
+import initialRoutes from "./API/initialize/initialRouter"
 
 app.use('/api/books', booksRoutes);
-app.use('/api/users', userRoutes);
 app.use('/api/books', booksRoutes);
-app.use('/api/users', userRoutes);
-
-
-app.get('/api/check', (req, res) => {
-    res.status(200).json({ message: "Server is running and check passed" });
-});
-app.get('/api/check', (req, res) => {
-    res.status(200).json({ message: "Server is running and check passed" });
-});
+app.use("/api/initialize", initialRoutes)
 
 
 app.listen(PORT, () => {
