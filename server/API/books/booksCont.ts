@@ -1,5 +1,5 @@
 import express from 'express'
-import connection from '../../../book-store/server/DB/database'
+import connection from '../../DB/database'
 
 export async function getAllBooks(req: express.Request, res: express.Response) {
     try {
