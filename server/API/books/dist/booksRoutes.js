@@ -2,9 +2,10 @@
 exports.__esModule = true;
 var express_1 = require("express");
 var router = express_1["default"].Router();
+var booksCont_1 = require("./booksCont");
 router
-    .get("", function () { }); //ALL
-// .post("", creatAllBooks)  //tamar
+    .get("", booksCont_1.getAllBooks)
+    .get("/addBooks", booksCont_1.addAllBooks);
 //good routing example :/api/users
 // .get("") <-- to get ALL users 
 // .get("/:id") <-- to get a specific user by the id

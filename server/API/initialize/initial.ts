@@ -12,13 +12,13 @@ export async function initial(req: express.Request, res: express.Response) {
             }
             else{
                 const query = `CREATE TABLE book_store.books (
-                    book_id INT NOT NULL,
+                    book_id INT NOT NULL AUTO_INCREMENT,
                     title VARCHAR(45) NOT NULL,
                     author VARCHAR(45) NOT NULL,
                     pageNum VARCHAR(45) NULL,
                     publisher VARCHAR(45) NULL,
-                    description VARCHAR(45) NULL,
-                    image VARCHAR(45) NOT NULL,
+                    description VARCHAR(10000) NULL,
+                    image VARCHAR(255) NOT NULL,
                     likes VARCHAR(45) NULL,
                     PRIMARY KEY (book_id),
                     UNIQUE INDEX book_id_UNIQUE (book_id ASC) VISIBLE

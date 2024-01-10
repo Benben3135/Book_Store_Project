@@ -36,8 +36,56 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.createBook = exports.getAllBooks = void 0;
+exports.createBook = exports.getAllBooks = exports.addAllBooks = void 0;
 var database_1 = require("../../DB/database");
+var books_1 = require("../../util/books");
+function addAllBooks(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var error_1;
+        var _this = this;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    // Use Promise.all to wait for all queries to finish
+                    return [4 /*yield*/, Promise.all(books_1.books.map(function (book) { return __awaiter(_this, void 0, void 0, function () {
+                            var insertQuery, queryPromise;
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0:
+                                        insertQuery = 'INSERT INTO book_store.books (title, author, pageNum, publisher, description, image, likes) VALUES (?, ?, ?, ?, ?, ?, ?)';
+                                        queryPromise = new Promise(function (resolve, reject) {
+                                            database_1["default"].query(insertQuery, [book.title, book.author, book.pageNum, book.publisher, book.description, book.image, book.likes], function (err, resultsAdd) {
+                                                if (err)
+                                                    reject(err);
+                                                else
+                                                    resolve(resultsAdd);
+                                            });
+                                        });
+                                        return [4 /*yield*/, queryPromise];
+                                    case 1:
+                                        _a.sent();
+                                        return [2 /*return*/];
+                                }
+                            });
+                        }); }))];
+                case 1:
+                    // Use Promise.all to wait for all queries to finish
+                    _a.sent();
+                    // Send a response when all queries are complete
+                    res.status(200).send({ ok: true, message: 'All books added successfully' });
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_1 = _a.sent();
+                    console.error(error_1);
+                    res.status(500).send({ ok: false, error: error_1 }); // Handle errors more gracefully in a production environment
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.addAllBooks = addAllBooks;
 function getAllBooks(req, res) {
     return __awaiter(this, void 0, void 0, function () {
         var query;

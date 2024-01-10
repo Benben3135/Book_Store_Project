@@ -24,7 +24,7 @@ import userRoutes from "./API/users/userRoutes"
 import booksRoutes from "./API/books/booksRoutes"
 import initialRoutes from "./API/initialize/initialRouter"
 
-app.use('/api/books', booksRoutes);
+app.use('/api/users', userRoutes);
 app.use('/api/books', booksRoutes);
 app.use("/api/initialize", initialRoutes)
 

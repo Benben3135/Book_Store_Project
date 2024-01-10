@@ -1,5 +1,31 @@
 import express from 'express'
 import connection from '../../DB/database'
+import {books} from "../../util/books"
+
+export async function addAllBooks(req: express.Request, res: express.Response) {
+    try {
+        // Use Promise.all to wait for all queries to finish
+        await Promise.all(
+            books.map(async (book) => {
+                const insertQuery = 'INSERT INTO book_store.books (title, author, pageNum, publisher, description, image, likes) VALUES (?, ?, ?, ?, ?, ?, ?)';
+                
+                const queryPromise = new Promise((resolve, reject) => {
+                    connection.query(insertQuery, [book.title, book.author, book.pageNum, book.publisher, book.description, book.image, book.likes], (err, resultsAdd) => {
+                        if (err) reject(err);
+                        else resolve(resultsAdd);
+                    });
+                });
+                await queryPromise;
+            })
+        );
+
+        // Send a response when all queries are complete
+        res.status(200).send({ ok: true, message: 'All books added successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ ok: false, error });  // Handle errors more gracefully in a production environment
+    }
+}
 
 export async function getAllBooks(req: express.Request, res: express.Response) {
     try {
