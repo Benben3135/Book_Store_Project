@@ -12,7 +12,6 @@ const connection = mysql.createConnection({
 
 connection.connect((err) => {
     try {
-        console.log("In connection to my-sql before err")
         if (err) throw err
         console.log("mySQL server is connected")
     } catch (error) {

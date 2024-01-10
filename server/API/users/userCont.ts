@@ -44,6 +44,7 @@ export async function register(req: express.Request, res: express.Response) {
                             const queryUser = `SELECT * FROM book_store.users WHERE (uid = ${uid});`
                             connection.query(queryUser, (err2, results) => {
                                 if (err2) throw err2;
+                                console.log(results)
                                 //@ts-ignore
                                 const data = uid
                                 const cookie = { data }
