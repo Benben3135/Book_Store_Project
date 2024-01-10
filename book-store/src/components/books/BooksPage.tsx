@@ -16,7 +16,7 @@ const BooksPage = () => {
             const booksDb = response.data
             if (!booksDb) throw new Error("At handelGetAllBooks: no books in DB");
            
-            //put the list in bookState and filterBooksState
+            //!put the list in bookState and filterBooksState
             setBooks(booksDb)
             setFilterBooks(booksDb)
         } catch (error) {
