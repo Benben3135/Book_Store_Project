@@ -1,14 +1,14 @@
-import { useDispatch } from "react-redux";
-import { scroll } from "../../features/layout/isScrollSlice";
-import { useEffect, useState } from "react";
-import { thereUser } from "../../features/user/isUserSlice";
 import RightSideBar from "@/components/RightSideBar/RightSideBar";
 import Footer from "@/components/footer/Footer";
-import { useSelector } from "react-redux";
-import { categorieSelector } from "../../features/categories/categorieSlice";
-import { initializeSql , initializeUserSql } from "../../api/insertData/initializeSql";
-import { getAllBooks } from "../../api/books/getAllBooks";
 import { Heart } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllBooks } from "../../api/books/getAllBooks";
+import { initializeBooksSql } from "../../api/insertData/initializeSql";
+import { categorieSelector } from "../../features/categories/categorieSlice";
+import { scroll } from "../../features/layout/isScrollSlice";
+import { thereUser } from "../../features/user/isUserSlice";
+import InsertData from "../../api/insertData/InsertData"
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -32,13 +32,11 @@ const HomePage = () => {
   }, [ActiveCatRedux]);
 
   useEffect(() => {
-    initializeSql();
-    initializeUserSql();
-  }, []);
-
-  useEffect(() => {
+    initializeBooksSql();
+    InsertData();
     getAllBooksFromDB();
   }, []);
+
 
   useEffect(() => {
     dispatch(scroll()); // Dispatch the scroll action to auto

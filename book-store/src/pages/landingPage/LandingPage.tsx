@@ -6,7 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { noScroll } from "../../features/layout/isScrollSlice";
 import {thereNoUser} from "../../features/user/isUserSlice";
-import {initializeUserSql} from "../../api/insertData/initializeSql.ts"
+import {initializeBooksSql, initializeUserSql} from "../../api/insertData/initializeSql.ts"
+import InsertData from "@/api/insertData/InsertData.tsx";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -15,8 +16,11 @@ const LandingPage = () => {
   useEffect(() => {
     dispatch(noScroll()); // Dispatch the scroll action
     dispatch(thereNoUser())
-    initializeUserSql()
+    initializeUserSql();
+    initializeBooksSql();
+
   }, []);
+
 
   return (
     <div className=" h-full w-full bg-gradient-to-r from-purple-100 to-blue-200 group">

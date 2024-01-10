@@ -6,4 +6,5 @@ export interface Book {
     description: string,
     image: string,
     likes: number,
+    genre: string
 }

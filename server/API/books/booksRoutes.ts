@@ -1,10 +1,10 @@
 import express from "express"
 const router = express.Router()
-import {getAllBooks , addAllBooks} from "./booksCont"
+import {getAllBooks , addAllBooks, createBook} from "./booksCont"
 
 router
 .get("", getAllBooks)
-.get("/addBooks", addAllBooks)
+.post("/addBooks", createBook)
 
 //good routing example :/api/users
 // .get("") <-- to get ALL users 

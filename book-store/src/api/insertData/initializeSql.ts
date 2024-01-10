@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const initializeSql = async () => {
+export const initializeBooksSql = async () => {
     const {request} = await axios.get("/api/initialize");
     console.log(request)
 }

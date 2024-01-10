@@ -66,11 +66,6 @@ export async function register(req: express.Request, res: express.Response) {
                 })
             }
         })
-
-
-
-
-        // res.status(200).send({ message: "User created successfully" });
     } catch (error: any) {
         console.error("Error creating user:", error);
         res.status(500).send({ ok: false, error: error.message });
