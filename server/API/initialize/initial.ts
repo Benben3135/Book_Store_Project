@@ -3,6 +3,7 @@ import connection from '../../DB/database';
 
 export async function initial(req: express.Request, res: express.Response) {
     try {
+        
         const query = `SELECT table_name FROM information_schema.tables WHERE table_name = 'books' AND table_schema = 'book_store';`
         connection.query(query, (err,results) => {
             if (err) throw err;
@@ -35,3 +36,34 @@ export async function initial(req: express.Request, res: express.Response) {
     }
 }
 
+export async function initialUserSql(req: express.Request, res: express.Response) {
+    try {
+        
+        const query = `SELECT table_name FROM information_schema.tables WHERE table_name = 'users' AND table_schema = 'book_store';`
+        connection.query(query, (err,results) => {
+            if (err) throw err;
+            //@ts-ignore
+            if (results && results.length > 0){
+                res.send("collection excist!")
+            }
+            else{
+                const query = `CREATE TABLE book_store.users (
+                    uid INT NOT NULL,
+                    email VARCHAR(45) NOT NULL,
+                    name VARCHAR(45) NOT NULL,
+                    img VARCHAR(45) NULL,
+                    password VARCHAR(45) NULL,
+                    PRIMARY KEY (uid),
+                    UNIQUE INDEX uid_UNIQUE (uid ASC) VISIBLE
+                );`
+
+                connection.query(query, (err,results) => {
+                    if (err) throw err;
+                    res.send("table of users created!")
+                })
+            }
+        })
+    } catch (error) {
+
+    }
+}

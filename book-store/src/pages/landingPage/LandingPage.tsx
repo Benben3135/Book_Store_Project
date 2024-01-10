@@ -5,7 +5,8 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { noScroll } from "../../features/layout/isScrollSlice";
-import {thereNoUser} from "../../features/user/isUserSlice"
+import {thereNoUser} from "../../features/user/isUserSlice";
+import {initializeUserSql} from "../../api/insertData/initializeSql.ts"
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ const LandingPage = () => {
   useEffect(() => {
     dispatch(noScroll()); // Dispatch the scroll action
     dispatch(thereNoUser())
+    initializeUserSql()
   }, []);
 
   return (
