@@ -6,7 +6,7 @@ import RightSideBar from "@/components/RightSideBar/RightSideBar";
 import Footer from "@/components/footer/Footer";
 import { useSelector } from "react-redux";
 import { categorieSelector } from "../../features/categories/categorieSlice";
-import { initializeSql } from "../../api/insertData/initializeSql";
+import { initializeSql , initializeUserSql } from "../../api/insertData/initializeSql";
 import { getAllBooks } from "../../api/books/getAllBooks";
 import { Heart } from "lucide-react";
 
@@ -33,6 +33,7 @@ const HomePage = () => {
 
   useEffect(() => {
     initializeSql();
+    initializeUserSql();
   }, []);
 
   useEffect(() => {
