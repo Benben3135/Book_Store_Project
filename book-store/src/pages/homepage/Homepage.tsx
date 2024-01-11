@@ -8,7 +8,8 @@ import { initializeBooksSql } from "../../api/insertData/initializeSql";
 import { categorieSelector } from "../../features/categories/categorieSlice";
 import { scroll } from "../../features/layout/isScrollSlice";
 import { thereUser } from "../../features/user/isUserSlice";
-import InsertData from "../../api/insertData/InsertData"
+import InsertData from "../../api/insertData/InsertData";
+import { motion } from "framer-motion";
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -37,7 +38,6 @@ const HomePage = () => {
     getAllBooksFromDB();
   }, []);
 
-
   useEffect(() => {
     dispatch(scroll()); // Dispatch the scroll action to auto
     dispatch(thereUser()); // Dispatch the user to true
@@ -46,7 +46,7 @@ const HomePage = () => {
   const getAllBooksFromDB = async () => {
     const booksFromDB = await getAllBooks();
     setBooks(booksFromDB);
-    console.log("books from DB:", booksFromDB)
+    console.log("books from DB:", booksFromDB);
   };
   useEffect(() => {
     console.log(books);
@@ -56,10 +56,10 @@ const HomePage = () => {
     <div className="w-screen h-fit overflow-hidden flex flex-col justify-start items-center">
       <div className="w-full h-screen top-0 overflow-hidden bg-gradient-to-r from-gray-600 to-slate-400">
         <RightSideBar />
-        <div className="grid lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-3 ml-12 mt-28 gap-4">
+        <div className="grid lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-3 ml-12 mt-28 gap-8">
           {books.map((book) => (
-            <div
-              className=" bg-slate-400 rounded-xl shadow-xl flex flex-col justify-start items-center"
+            <motion.div
+              className=" bg-slate-400 rounded-xl shadow-xl flex flex-col justify-start items-center hover:scale-105 transition-all cursor-pointer"
               key={book.book_id}
             >
               <h1 className="font-bold text-xl text-slate-800 text-center mt-2 antialiased">
@@ -73,9 +73,11 @@ const HomePage = () => {
               />
               <div className=" flex flex-row justify-center items-center mt-2 gap-2">
                 <p>{book.likes}</p>
-                <Heart className=" hover:bg-red-400 rounded-full transition-all cursor-pointer"/>
+                <div className=" hover:bg-red-300 rounded-full transition-all cursor-pointer w-6 h-6 flex flex-col justify-center items-center">
+                  <Heart />
+                </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

@@ -4,7 +4,6 @@ import { books } from "../../util/books"
 
 export async function addAllBooks(req: express.Request, res: express.Response) {
     try {
-        console.log("addAllBooks amounting");
 
         // Use Promise.all to wait for all queries to finish
         await Promise.all(
@@ -12,7 +11,6 @@ export async function addAllBooks(req: express.Request, res: express.Response) {
                 const insertQuery = 'INSERT INTO book_store.books (title, author, pageNum, publisher, description, image, likes,genre) VALUES (?, ?, ?, ?, ?, ?, ?)';
 
                 const queryPromise = new Promise((resolve, reject) => {
-                    console.log("inserting into SQL", book)
                     connection.query(insertQuery, [book.title, book.author, book.pageNum, book.publisher, book.description, book.image, book.likes, book.genre], (err, resultsAdd) => {
                         if (err) reject(err);
                         else resolve(resultsAdd);
@@ -53,7 +51,6 @@ export async function createBook(req: express.Request, res: express.Response) {
 
         const bookData = req.body
         const { title, author, pageNum, publisher, description, image, likes, genre } = req.body
-        console.log("this is from req.body" , title, author, pageNum, publisher, description, image, likes, genre )
         if (!title || !author || !image) throw new Error("no data in FUNCTION createAllBook in file booksCtrl.ts")
 
         const checkQuery = `SELECT * FROM book_store.books WHERE  title = ?`

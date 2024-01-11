@@ -47,7 +47,6 @@ function addAllBooks(req, res) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
-                    console.log("addAllBooks amounting");
                     // Use Promise.all to wait for all queries to finish
                     return [4 /*yield*/, Promise.all(books_1.books.map(function (book) { return __awaiter(_this, void 0, void 0, function () {
                             var insertQuery, queryPromise;
@@ -56,7 +55,6 @@ function addAllBooks(req, res) {
                                     case 0:
                                         insertQuery = 'INSERT INTO book_store.books (title, author, pageNum, publisher, description, image, likes,genre) VALUES (?, ?, ?, ?, ?, ?, ?)';
                                         queryPromise = new Promise(function (resolve, reject) {
-                                            console.log("inserting into SQL", book);
                                             database_1["default"].query(insertQuery, [book.title, book.author, book.pageNum, book.publisher, book.description, book.image, book.likes, book.genre], function (err, resultsAdd) {
                                                 if (err)
                                                     reject(err);
@@ -122,7 +120,6 @@ function createBook(req, res) {
             try {
                 bookData = req.body;
                 _a = req.body, title_1 = _a.title, author_1 = _a.author, pageNum_1 = _a.pageNum, publisher_1 = _a.publisher, description_1 = _a.description, image_1 = _a.image, likes_1 = _a.likes, genre_1 = _a.genre;
-                console.log("this is from req.body", title_1, author_1, pageNum_1, publisher_1, description_1, image_1, likes_1, genre_1);
                 if (!title_1 || !author_1 || !image_1)
                     throw new Error("no data in FUNCTION createAllBook in file booksCtrl.ts");
                 checkQuery = "SELECT * FROM book_store.books WHERE  title = ?";
