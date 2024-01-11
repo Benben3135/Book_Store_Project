@@ -77,3 +77,23 @@ export async function createBook(req: express.Request, res: express.Response) {
         res.status(500).send({ ok: false, error })
     }
 }
+
+export async function getOneBook(req: express.Request, res: express.Response) {
+    const {title} = req.query;
+    if (!title) throw new Error("no title");
+    try {
+        const query = `SELECT * FROM book_store.books WHERE title = "${title}";`
+        connection.query(query, (err, results) => {
+            try {
+                if (err) throw err
+                res.send({ ok: true, results })
+            } catch (error) {
+                console.log(error)
+                res.status(500).send({ ok: false, error })
+            }
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({ ok: false, error })  //closer - without it the error could stack in loop
+    }
+}
