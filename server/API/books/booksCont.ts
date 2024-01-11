@@ -51,7 +51,9 @@ export async function getAllBooks(req: express.Request, res: express.Response) {
 export async function createBook(req: express.Request, res: express.Response) {
     try {
 
+        const bookData = req.body
         const { title, author, pageNum, publisher, description, image, likes, genre } = req.body
+        console.log("this is from req.body" , title, author, pageNum, publisher, description, image, likes, genre )
         if (!title || !author || !image) throw new Error("no data in FUNCTION createAllBook in file booksCtrl.ts")
 
         const checkQuery = `SELECT * FROM book_store.books WHERE  title = ?`
@@ -62,7 +64,7 @@ export async function createBook(req: express.Request, res: express.Response) {
                 res.status(409).send({ ok: false, message: "Book already exists" });
             }
             else {
-                const query = `INSERT INTO book_store.books (title, author, pageNum, publisher, description, image, likes,genre) VALUES ('${title}', '${author}', ${pageNum}, '${publisher}', '${description}', '${image}', ${likes} , '${genre}');`;
+                const query = `INSERT INTO book_store.books (title, author, pageNum, publisher, description, image, likes,genre) VALUES ('${title}', '${author}', ${pageNum}, '${publisher}', "${description}", '${image}', ${likes} , '${genre}');`;
                 connection.query(query, (err, results) => {
                     try {
                         if (err) throw err;

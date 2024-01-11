@@ -47,15 +47,17 @@ function addAllBooks(req, res) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
+                    console.log("addAllBooks amounting");
                     // Use Promise.all to wait for all queries to finish
                     return [4 /*yield*/, Promise.all(books_1.books.map(function (book) { return __awaiter(_this, void 0, void 0, function () {
                             var insertQuery, queryPromise;
                             return __generator(this, function (_a) {
                                 switch (_a.label) {
                                     case 0:
-                                        insertQuery = 'INSERT INTO book_store.books (title, author, pageNum, publisher, description, image, likes) VALUES (?, ?, ?, ?, ?, ?, ?)';
+                                        insertQuery = 'INSERT INTO book_store.books (title, author, pageNum, publisher, description, image, likes,genre) VALUES (?, ?, ?, ?, ?, ?, ?)';
                                         queryPromise = new Promise(function (resolve, reject) {
-                                            database_1["default"].query(insertQuery, [book.title, book.author, book.pageNum, book.publisher, book.description, book.image, book.likes], function (err, resultsAdd) {
+                                            console.log("inserting into SQL", book);
+                                            database_1["default"].query(insertQuery, [book.title, book.author, book.pageNum, book.publisher, book.description, book.image, book.likes, book.genre], function (err, resultsAdd) {
                                                 if (err)
                                                     reject(err);
                                                 else
@@ -115,21 +117,34 @@ function getAllBooks(req, res) {
 exports.getAllBooks = getAllBooks;
 function createBook(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, title, author, pageNum, publisher, description, image, likes, query;
+        var bookData, _a, title_1, author_1, pageNum_1, publisher_1, description_1, image_1, likes_1, genre_1, checkQuery;
         return __generator(this, function (_b) {
             try {
-                _a = req.body, title = _a.title, author = _a.author, pageNum = _a.pageNum, publisher = _a.publisher, description = _a.description, image = _a.image, likes = _a.likes;
-                if (!title || !author || !image)
+                bookData = req.body;
+                _a = req.body, title_1 = _a.title, author_1 = _a.author, pageNum_1 = _a.pageNum, publisher_1 = _a.publisher, description_1 = _a.description, image_1 = _a.image, likes_1 = _a.likes, genre_1 = _a.genre;
+                console.log("this is from req.body", title_1, author_1, pageNum_1, publisher_1, description_1, image_1, likes_1, genre_1);
+                if (!title_1 || !author_1 || !image_1)
                     throw new Error("no data in FUNCTION createAllBook in file booksCtrl.ts");
-                query = "INSERT INTO books (title, author, pageNum, publisher, description, image, likes) VALUES ('" + title + "', '" + author + "', " + pageNum + ", '" + publisher + "', '" + description + "', '" + image + "', " + likes + ");";
-                database_1["default"].query(query, function (err, results) {
-                    try {
-                        if (err)
-                            throw err;
-                        res.send({ ok: true, results: results });
+                checkQuery = "SELECT * FROM book_store.books WHERE  title = ?";
+                database_1["default"].query(checkQuery, [title_1], function (err, results) {
+                    if (err)
+                        throw err;
+                    //@ts-ignore
+                    if (results.length > 0) {
+                        res.status(409).send({ ok: false, message: "Book already exists" });
                     }
-                    catch (error) {
-                        res.status(500).send({ ok: false, error: error });
+                    else {
+                        var query = "INSERT INTO book_store.books (title, author, pageNum, publisher, description, image, likes,genre) VALUES ('" + title_1 + "', '" + author_1 + "', " + pageNum_1 + ", '" + publisher_1 + "', \"" + description_1 + "\", '" + image_1 + "', " + likes_1 + " , '" + genre_1 + "');";
+                        database_1["default"].query(query, function (err, results) {
+                            try {
+                                if (err)
+                                    throw err;
+                                res.send({ ok: true, results: results });
+                            }
+                            catch (error) {
+                                res.status(500).send({ ok: false, error: error });
+                            }
+                        });
                     }
                 });
             }

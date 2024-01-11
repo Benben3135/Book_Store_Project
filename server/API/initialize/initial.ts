@@ -18,8 +18,8 @@ export async function initial(req: express.Request, res: express.Response) {
                     author VARCHAR(45) NOT NULL,
                     pageNum VARCHAR(45) NULL,
                     publisher VARCHAR(45) NULL,
-                    description VARCHAR(10000) NULL,
-                    image VARCHAR(255) NOT NULL,
+                    description TEXT NULL,
+                    image TEXT NULL,
                     likes VARCHAR(45) NULL,
                     genre VARCHAR(45) NOT NULL,
                     PRIMARY KEY (book_id),
@@ -49,10 +49,10 @@ export async function initialUserSql(req: express.Request, res: express.Response
             }
             else{
                 const query = `CREATE TABLE book_store.users (
-                    uid INT NOT NULL,
+                    uid VARCHAR(45) NOT NULL,
                     name VARCHAR(45) NOT NULL,
                     email VARCHAR(45) NOT NULL,
-                    img VARCHAR(45) NULL,
+                    img TEXT NULL,
                     password VARCHAR(45) NULL,
                     PRIMARY KEY (uid),
                     UNIQUE INDEX uid_UNIQUE (uid ASC) VISIBLE

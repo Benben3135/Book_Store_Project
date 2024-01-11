@@ -46,6 +46,7 @@ const HomePage = () => {
   const getAllBooksFromDB = async () => {
     const booksFromDB = await getAllBooks();
     setBooks(booksFromDB);
+    console.log("books from DB:", booksFromDB)
   };
   useEffect(() => {
     console.log(books);
