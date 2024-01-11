@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import BookCard, { Book } from './BookCard';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import Review from './Review';
 
 const SpecificBookPage = () => {
   const [bookData, setBookData] = useState<Book>();
