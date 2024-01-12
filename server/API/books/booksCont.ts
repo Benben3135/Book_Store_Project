@@ -168,4 +168,4 @@ export async function getOneBook(req: express.Request, res: express.Response) {
     } catch (error) {
         console.log(error)
         res.status(500).send({ ok: false, error })  //closer - without it the error could stack in loop
-    }
+    }}
