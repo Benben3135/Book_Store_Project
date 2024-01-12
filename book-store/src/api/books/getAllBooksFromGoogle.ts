@@ -51,10 +51,7 @@ const delay = (ms:number) => new Promise(resolve => setTimeout(resolve, ms));
   // Call the function to fetch books for each letter in the alphabet
   fetchBooksForAlphabet()
     .then(allBooks => {
-      console.log('All Books:', allBooks);
     })
     .catch(error => {
       console.error('Error fetching books for the alphabet', error);
     });
-
-const 

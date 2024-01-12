@@ -91,7 +91,7 @@ export async function getActiveUserData(req: express.Request, res: express.Respo
 
        
 
-        const { data } = decodedCookie;
+        const data = decodedCookie.uid;
         console.log("uid from cookie" , data)
 
         const query = `SELECT * FROM book_store.users WHERE uid = ?`;

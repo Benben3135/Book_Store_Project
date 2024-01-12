@@ -10,12 +10,13 @@ import { scroll } from "../../features/layout/isScrollSlice";
 import { thereUser } from "../../features/user/isUserSlice";
 import InsertData from "../../api/insertData/InsertData";
 import { motion } from "framer-motion";
+import { likeBook, getFavoriteBooks } from "../../api/books/likeBook";
 
 const HomePage = () => {
   const dispatch = useDispatch();
 
   interface Book {
-    book_id: string;
+    book_id: number;
     title: string;
     author: string;
     pageNum: number;
@@ -26,6 +27,7 @@ const HomePage = () => {
   }
   const [activeCat, setActiveCat] = useState("");
   const [books, setBooks] = useState<Book[]>([]);
+  const [likedBooks, setLikedBooks] = useState<number[]>([]);
   const ActiveCatRedux = useSelector(categorieSelector);
 
   useEffect(() => {
@@ -36,6 +38,7 @@ const HomePage = () => {
     initializeBooksSql();
     InsertData();
     getAllBooksFromDB();
+    getFavoriteBooks();
   }, []);
 
   useEffect(() => {
@@ -43,14 +46,28 @@ const HomePage = () => {
     dispatch(thereUser()); // Dispatch the user to true
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const favoriteBooks = await getFavoriteBooks();
+      setLikedBooks(favoriteBooks);
+    };
+    fetchData();
+  }, [getFavoriteBooks]);
+
   const getAllBooksFromDB = async () => {
     const booksFromDB = await getAllBooks();
     setBooks(booksFromDB);
-    console.log("books from DB:", booksFromDB);
   };
+
+  const likedBook = async (id: number) => {
+    await likeBook(id);
+    const updatedFavoriteBooks = await getFavoriteBooks();
+    setLikedBooks(updatedFavoriteBooks);
+  };
+
   useEffect(() => {
-    console.log(books);
-  }, [books]);
+    getFavoriteBooks();
+  }, [likedBook]);
 
   return (
     <div className="w-screen h-fit overflow-hidden flex flex-col justify-start items-center">
@@ -73,9 +90,21 @@ const HomePage = () => {
               />
               <div className=" flex flex-row justify-center items-center mt-2 gap-2">
                 <p>{book.likes}</p>
-                <div className=" hover:bg-red-300 rounded-full transition-all cursor-pointer w-6 h-6 flex flex-col justify-center items-center">
-                  <Heart />
-                </div>
+                {likedBooks.includes(book.book_id) ? (
+                  <div
+                    onClick={() => likedBook(book.book_id)}
+                    className="rounded-full transition-all cursor-pointer w-6 h-6 flex flex-col justify-center items-center"
+                  >
+                    <Heart color="red" />
+                  </div>
+                ) : (
+                  <div
+                    onClick={() => likedBook(book.book_id)}
+                    className="hover:bg-red-300 rounded-full transition-all cursor-pointer w-6 h-6 flex flex-col justify-center items-center"
+                  >
+                    <Heart />
+                  </div>
+                )}
               </div>
             </motion.div>
           ))}

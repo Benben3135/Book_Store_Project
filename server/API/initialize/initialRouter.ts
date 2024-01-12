@@ -5,6 +5,6 @@ const router = express.Router()
 router
 .get("" , initial)
 .get("/user", initialUserSql)
-.get("/likes" , intialLikesSql)
+.get("/favorite" , intialLikesSql)
 
 export default router;

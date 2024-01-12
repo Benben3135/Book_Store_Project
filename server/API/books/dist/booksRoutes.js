@@ -5,7 +5,9 @@ var router = express_1["default"].Router();
 var booksCont_1 = require("./booksCont");
 router
     .get("", booksCont_1.getAllBooks)
-    .get("/addBooks", booksCont_1.addAllBooks);
+    .get("/getFavorites", booksCont_1.sendFavorites)
+    .post("/addBooks", booksCont_1.createBook)
+    .post("/addFavorite", booksCont_1.addFavorite);
 //good routing example :/api/users
 // .get("") <-- to get ALL users 
 // .get("/:id") <-- to get a specific user by the id

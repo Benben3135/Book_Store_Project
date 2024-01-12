@@ -36,9 +36,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.createBook = exports.getAllBooks = exports.addAllBooks = void 0;
+exports.sendFavorites = exports.addFavorite = exports.createBook = exports.getAllBooks = exports.addAllBooks = void 0;
 var database_1 = require("../../DB/database");
 var books_1 = require("../../util/books");
+var jwt_simple_1 = require("jwt-simple");
+var saltRounds = 10;
 function addAllBooks(req, res) {
     return __awaiter(this, void 0, void 0, function () {
         var error_1;
@@ -153,3 +155,83 @@ function createBook(req, res) {
     });
 }
 exports.createBook = createBook;
+function addFavorite(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var book_id_1, user, secret, decodedCookie, user_id_1, checkQuery;
+        return __generator(this, function (_a) {
+            try {
+                book_id_1 = req.body.id;
+                user = req.cookies.user;
+                if (!user) {
+                    res.status(401).send({ ok: false, message: 'User not authenticated' });
+                    return [2 /*return*/];
+                }
+                secret = process.env.SECRET;
+                if (!secret) {
+                    throw new Error('No secret key');
+                }
+                decodedCookie = jwt_simple_1["default"].decode(user, secret);
+                user_id_1 = decodedCookie.uid;
+                checkQuery = "SELECT * FROM book_store.favorites where user_id = ? and book_id = ?";
+                database_1["default"].query(checkQuery, [user_id_1, book_id_1], function (error, results) {
+                    if (error)
+                        throw error;
+                    //@ts-ignore
+                    if (results.length === 0) {
+                        var insertQuery = 'INSERT INTO book_store.favorites (user_id, book_id) VALUES (?,?)';
+                        database_1["default"].query(insertQuery, [user_id_1, book_id_1], function (error2, insertResults) {
+                            try {
+                                if (error2)
+                                    throw error2;
+                                //@ts-ignore
+                                res.send(insertResults);
+                            }
+                            catch (error) {
+                                res.status(500).send({ ok: false, error: error.message });
+                            }
+                        });
+                    }
+                    else {
+                        var deleteQuery = "DELETE FROM book_store.favorites\n                WHERE user_id = ? AND book_id = ?;";
+                        database_1["default"].query(deleteQuery, [user_id_1, book_id_1], function (error3, results) {
+                            if (error3)
+                                throw error3;
+                            res.status(200).send({ ok: true, message: "deleted!" });
+                        });
+                    }
+                });
+            }
+            catch (error) {
+            }
+            return [2 /*return*/];
+        });
+    });
+}
+exports.addFavorite = addFavorite;
+function sendFavorites(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var user, secret, decodedCookie, user_id, query;
+        return __generator(this, function (_a) {
+            user = req.cookies.user;
+            if (!user) {
+                res.status(401).send({ ok: false, message: 'User not authenticated' });
+                return [2 /*return*/];
+            }
+            secret = process.env.SECRET;
+            if (!secret) {
+                throw new Error('No secret key');
+            }
+            decodedCookie = jwt_simple_1["default"].decode(user, secret);
+            user_id = decodedCookie.uid;
+            query = "SELECT * FROM book_store.favorites where user_id = ?";
+            database_1["default"].query(query, [user_id], function (error, results) {
+                if (error)
+                    throw error;
+                console.log("sendFavorites results is:", results);
+                res.send(results);
+            });
+            return [2 /*return*/];
+        });
+    });
+}
+exports.sendFavorites = sendFavorites;
