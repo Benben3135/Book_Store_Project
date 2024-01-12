@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.sendFavorites = exports.addFavorite = exports.createBook = exports.getAllBooks = exports.addAllBooks = void 0;
+exports.getOneBook = exports.sendFavorites = exports.addFavorite = exports.createBook = exports.getAllBooks = exports.addAllBooks = void 0;
 var database_1 = require("../../DB/database");
 var books_1 = require("../../util/books");
 var jwt_simple_1 = require("jwt-simple");
@@ -235,3 +235,33 @@ function sendFavorites(req, res) {
     });
 }
 exports.sendFavorites = sendFavorites;
+function getOneBook(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var title, query;
+        return __generator(this, function (_a) {
+            title = req.query.title;
+            if (!title)
+                throw new Error("no title");
+            try {
+                query = "SELECT * FROM book_store.books WHERE title = \"" + title + "\";";
+                database_1["default"].query(query, function (err, results) {
+                    try {
+                        if (err)
+                            throw err;
+                        res.send({ ok: true, results: results });
+                    }
+                    catch (error) {
+                        console.log(error);
+                        res.status(500).send({ ok: false, error: error });
+                    }
+                });
+            }
+            catch (error) {
+                console.log(error);
+                res.status(500).send({ ok: false, error: error }); //closer - without it the error could stack in loop
+            }
+            return [2 /*return*/];
+        });
+    });
+}
+exports.getOneBook = getOneBook;
