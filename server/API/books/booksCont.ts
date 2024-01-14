@@ -81,6 +81,7 @@ export async function createBook(req: express.Request, res: express.Response) {
     }
 }
 
+
 export async function addFavorite(req: express.Request, res: express.Response) {
     try {
         const book_id = req.body.id;
@@ -151,6 +152,7 @@ export async function sendFavorites(req: express.Request, res: express.Response)
 
 }
 
+
 export async function getOneBook(req: express.Request, res: express.Response) {
     const {title} = req.query;
     if (!title) throw new Error("no title");
@@ -168,4 +170,6 @@ export async function getOneBook(req: express.Request, res: express.Response) {
     } catch (error) {
         console.log(error)
         res.status(500).send({ ok: false, error })  //closer - without it the error could stack in loop
+    }
+}
     }}
