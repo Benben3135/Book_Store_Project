@@ -147,17 +147,18 @@ export async function sendFavorites(req: express.Request, res: express.Response)
     connection.query(query, [user_id], (error, results) => {
         if (error) throw error;
         console.log("sendFavorites results is:" , results)
-        res.send(results)
+        res.send({results})
     })
 
 }
 
 
 export async function getOneBook(req: express.Request, res: express.Response) {
-    const {title} = req.query;
-    if (!title) throw new Error("no title");
+    const { id } = req.params;
+    console.log("id I got from client is:", id);
+    if (!id) throw new Error("no title");
     try {
-        const query = `SELECT * FROM book_store.books WHERE title = "${title}";`
+        const query = `SELECT * FROM book_store.books WHERE book_id = "${id}";`
         connection.query(query, (err, results) => {
             try {
                 if (err) throw err
@@ -172,4 +173,12 @@ export async function getOneBook(req: express.Request, res: express.Response) {
         res.status(500).send({ ok: false, error })  //closer - without it the error could stack in loop
     }
 }
-    }}
+
+export async function getAuthorBooks(req: express.Request, res: express.Response) {
+    const author = req.params.authorName;
+    const query = `SELECT * FROM book_store.books WHERE author = "${author}"`
+    connection.query(query , (err,results) => {
+        if (err) throw err;
+        res.send(results);
+    })
+}

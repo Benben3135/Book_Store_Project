@@ -11,17 +11,8 @@ export interface Book {
     genre: string
 }
 
-interface BookCardProp {
-    book: Book | undefined
-}
 
 const BookCard: FC<BookCardProp> = ({ book }) => {
-    const [like, setLike] = useState<number>(0)
-
-    const handelAddLike = () => {
-        setLike(like +1)
-        console.log("At boon card like state:",like)
-    }
 
     return (
         <>

@@ -36,9 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.getOneBook = exports.createBook = exports.getAllBooks = exports.addAllBooks = void 0;
-
-exports.getOneBook = exports.sendFavorites = exports.addFavorite = exports.createBook = exports.getAllBooks = exports.addAllBooks = void 0;
+exports.getAuthorBooks = exports.getOneBook = exports.sendFavorites = exports.addFavorite = exports.createBook = exports.getAllBooks = exports.addAllBooks = void 0;
 var database_1 = require("../../DB/database");
 var books_1 = require("../../util/books");
 var jwt_simple_1 = require("jwt-simple");
@@ -51,7 +49,6 @@ function addAllBooks(req, res) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
-                    console.log("addAllBooks amounting");
                     // Use Promise.all to wait for all queries to finish
                     return [4 /*yield*/, Promise.all(books_1.books.map(function (book) { return __awaiter(_this, void 0, void 0, function () {
                             var insertQuery, queryPromise;
@@ -60,8 +57,6 @@ function addAllBooks(req, res) {
                                     case 0:
                                         insertQuery = 'INSERT INTO book_store.books (title, author, pageNum, publisher, description, image, likes,genre) VALUES (?, ?, ?, ?, ?, ?, ?)';
                                         queryPromise = new Promise(function (resolve, reject) {
-                                            console.log("inserting into SQL", book);
-
                                             database_1["default"].query(insertQuery, [book.title, book.author, book.pageNum, book.publisher, book.description, book.image, book.likes, book.genre], function (err, resultsAdd) {
                                                 if (err)
                                                     reject(err);
@@ -122,10 +117,6 @@ function getAllBooks(req, res) {
 exports.getAllBooks = getAllBooks;
 function createBook(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, title_1, author_1, pageNum_1, publisher_1, description_1, image_1, likes_1, genre_1, checkQuery;
-        return __generator(this, function (_b) {
-            try {
-
         var bookData, _a, title_1, author_1, pageNum_1, publisher_1, description_1, image_1, likes_1, genre_1, checkQuery;
         return __generator(this, function (_b) {
             try {
@@ -142,7 +133,6 @@ function createBook(req, res) {
                         res.status(409).send({ ok: false, message: "Book already exists" });
                     }
                     else {
-                        var query = "INSERT INTO book_store.books (title, author, pageNum, publisher, description, image, likes,genre) VALUES ('" + title_1 + "', '" + author_1 + "', " + pageNum_1 + ", '" + publisher_1 + "', '" + description_1 + "', '" + image_1 + "', " + likes_1 + " , '" + genre_1 + "');";
                         var query = "INSERT INTO book_store.books (title, author, pageNum, publisher, description, image, likes,genre) VALUES ('" + title_1 + "', '" + author_1 + "', " + pageNum_1 + ", '" + publisher_1 + "', \"" + description_1 + "\", '" + image_1 + "', " + likes_1 + " , '" + genre_1 + "');";
                         database_1["default"].query(query, function (err, results) {
                             try {
@@ -165,7 +155,6 @@ function createBook(req, res) {
     });
 }
 exports.createBook = createBook;
-
 function addFavorite(req, res) {
     return __awaiter(this, void 0, void 0, function () {
         var book_id_1, user, secret, decodedCookie, user_id_1, checkQuery;
@@ -239,7 +228,7 @@ function sendFavorites(req, res) {
                 if (error)
                     throw error;
                 console.log("sendFavorites results is:", results);
-                res.send(results);
+                res.send({ results: results });
             });
             return [2 /*return*/];
         });
@@ -248,13 +237,14 @@ function sendFavorites(req, res) {
 exports.sendFavorites = sendFavorites;
 function getOneBook(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var title, query;
+        var id, query;
         return __generator(this, function (_a) {
-            title = req.query.title;
-            if (!title)
+            id = req.params.id;
+            console.log("id I got from client is:", id);
+            if (!id)
                 throw new Error("no title");
             try {
-                query = "SELECT * FROM book_store.books WHERE title = \"" + title + "\";";
+                query = "SELECT * FROM book_store.books WHERE book_id = \"" + id + "\";";
                 database_1["default"].query(query, function (err, results) {
                     try {
                         if (err)
@@ -276,3 +266,19 @@ function getOneBook(req, res) {
     });
 }
 exports.getOneBook = getOneBook;
+function getAuthorBooks(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var author, query;
+        return __generator(this, function (_a) {
+            author = req.params.authorName;
+            query = "SELECT * FROM book_store.books WHERE author = \"" + author + "\"";
+            database_1["default"].query(query, function (err, results) {
+                if (err)
+                    throw err;
+                res.send(results);
+            });
+            return [2 /*return*/];
+        });
+    });
+}
+exports.getAuthorBooks = getAuthorBooks;

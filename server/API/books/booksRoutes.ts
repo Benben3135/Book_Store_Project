@@ -1,14 +1,15 @@
 import express from "express"
 const router = express.Router()
 
-import {getAllBooks , addAllBooks, createBook, addFavorite , sendFavorites, getOneBook} from "./booksCont"
+import {getAllBooks , addAllBooks, createBook, addFavorite , sendFavorites, getOneBook , getAuthorBooks} from "./booksCont"
 
 router
 .get("", getAllBooks)
 .get("/getFavorites" , sendFavorites)
 .post("/addBooks", createBook)
-.get("/:title", getOneBook) //<-- to get a specific book by its title
+.get("/getOneBook/:id", getOneBook) //<-- to get a specific book by its title
 .post("/addFavorite" , addFavorite)
+.get("/authorBooks/:authorName", getAuthorBooks)
 
 //good routing example :/api/users
 // .get("") <-- to get ALL users 

@@ -11,9 +11,11 @@ import { thereUser } from "../../features/user/isUserSlice";
 import InsertData from "../../api/insertData/InsertData";
 import { motion } from "framer-motion";
 import { likeBook, getFavoriteBooks } from "../../api/books/likeBook";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   interface Book {
     book_id: number;
@@ -71,20 +73,21 @@ const HomePage = () => {
 
   return (
     <div className="w-screen h-fit overflow-hidden flex flex-col justify-start items-center">
-      <div className="w-full h-screen top-0 overflow-hidden bg-gradient-to-r from-gray-600 to-slate-400">
+      <div className="w-full h-full top-0 overflow-hidden bg-gradient-to-r from-gray-600 to-slate-400">
         <RightSideBar />
-        <div className="grid lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-3 ml-12 mt-28 gap-8">
+        <div className=" w-3/4 grid lg:grid-cols-4 md:grid-cols-4 sm:grid-cols-3 ml-24 mt-28 gap-8 pb-8">
           {books.map((book) => (
             <motion.div
-              className=" bg-slate-400 rounded-xl shadow-xl flex flex-col justify-start items-center hover:scale-105 transition-all cursor-pointer"
+              className=" bg-slate-300 rounded-xl shadow-xl flex flex-col justify-start items-center hover:scale-105 transition-all cursor-pointer"
               key={book.book_id}
+              onClick={() => navigate(`/bookPage/${book.book_id}`)}
             >
               <h1 className="font-bold text-xl text-slate-800 text-center mt-2 antialiased">
                 {book.title}
               </h1>
               <p className=" antialiased italic font-thin">{book.author}</p>
               <img
-                className=" w-56 h-56 rounded-xl mb-2"
+                className=" w-48 h-60 rounded-xl mb-2"
                 src={book.image}
                 alt={book.title}
               />
