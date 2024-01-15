@@ -46,7 +46,7 @@ export async function getAllBooks(req: express.Request, res: express.Response) {
         })
     } catch (error) {
         console.log(error)
-        res.status(500).send({ ok: false, error })  //closer - without it the error could stack in loop
+        res.status(500).send({ ok: false, error })
     }
 }
 
@@ -107,7 +107,22 @@ export async function addFavorite(req: express.Request, res: express.Response) {
                     try {
                         if (error2) throw error2;
                         //@ts-ignore
-                        res.send(insertResults)
+                        if (insertResults) {
+                            const findAddQuery = `SELECT * FROM book_store.books WHERE book_id = ${book_id}`
+                            connection.query(findAddQuery, (err2, findResults) => {
+                                if (err2) throw err2;
+                                if (findResults) {
+                                    //@ts-ignore
+                                    const likes = findResults[0].likes
+                                    const newLikes = parseInt(likes) + 1
+                                    const insertQuery = `UPDATE book_store.books SET likes = ${newLikes} WHERE (book_id = ${book_id});`
+                                    connection.query(insertQuery, (err3, insertResults) => {
+                                        if (err3) throw err3;
+                                        res.send(insertResults)
+                                    })
+                                }
+                            })
+                        }
                     } catch (error) {
                         res.status(500).send({ ok: false, error: (error as Error).message })
 
@@ -119,7 +134,22 @@ export async function addFavorite(req: express.Request, res: express.Response) {
                 WHERE user_id = ? AND book_id = ?;`
                 connection.query(deleteQuery, [user_id, book_id], (error3, results) => {
                     if (error3) throw error3;
-                    res.status(200).send({ ok: true, message: "deleted!" })
+                    if (results) {
+                        const findAddQuery = `SELECT * FROM book_store.books WHERE book_id = ${book_id}`
+                        connection.query(findAddQuery, (err2, findResults) => {
+                            if (err2) throw err2;
+                            if (findResults) {
+                                //@ts-ignore
+                                const likes = findResults[0].likes
+                                const newLikes = parseInt(likes) - 1
+                                const insertQuery = `UPDATE book_store.books SET likes = ${newLikes} WHERE (book_id = ${book_id});`
+                                connection.query(insertQuery, (err3, insertResults) => {
+                                    if (err3) throw err3;
+                                    res.status(200).send({ ok: true, message: "deleted!" })
+                                })
+                            }
+                        })
+                    }
                 })
             }
         })
@@ -143,11 +173,10 @@ export async function sendFavorites(req: express.Request, res: express.Response)
     const user_id = decodedCookie.uid;
     const query = `SELECT * FROM book_store.favorites where user_id = ?`
 
-    
+
     connection.query(query, [user_id], (error, results) => {
         if (error) throw error;
-        console.log("sendFavorites results is:" , results)
-        res.send({results})
+        res.send({ results })
     })
 
 }
@@ -155,7 +184,6 @@ export async function sendFavorites(req: express.Request, res: express.Response)
 
 export async function getOneBook(req: express.Request, res: express.Response) {
     const { id } = req.params;
-    console.log("id I got from client is:", id);
     if (!id) throw new Error("no title");
     try {
         const query = `SELECT * FROM book_store.books WHERE book_id = "${id}";`
@@ -177,8 +205,75 @@ export async function getOneBook(req: express.Request, res: express.Response) {
 export async function getAuthorBooks(req: express.Request, res: express.Response) {
     const author = req.params.authorName;
     const query = `SELECT * FROM book_store.books WHERE author = "${author}"`
-    connection.query(query , (err,results) => {
+    connection.query(query, (err, results) => {
         if (err) throw err;
         res.send(results);
     })
+}
+
+export async function addComment(req: express.Request, res: express.Response) {
+    try {
+        const comment = req.body.comment;
+        const book_id = req.body.book_id;
+        const { user } = req.cookies;
+        if (!user) {
+            res.status(401).send({ ok: false, message: 'User not authenticated' });
+            return;
+        }
+
+        const secret = process.env.SECRET;
+        if (!secret) {
+            throw new Error('No secret key');
+        }
+        const decodedCookie = jwt.decode(user, secret);
+        const user_id = decodedCookie.uid;
+
+        const userQuery = `SELECT * FROM book_store.users WHERE uid = "${user_id}"`
+        connection.query(userQuery, [user_id, book_id, comment], (error, resultsUser) => {
+            if (error) throw error;
+            if (resultsUser) {
+                //@ts-ignore
+                const query = 'INSERT INTO book_store.reviews (user_id, book_id, review,user_name) VALUES (?,?,?,?)';
+                //@ts-ignore
+                connection.query(query, [user_id, book_id, comment, resultsUser[0].name], (err, results) => {
+                    if (err) throw err;
+                    res.send({ ok: true, results })
+                })
+            }
+        })
+
+    } catch (error) {
+        res.status(500).send({ ok: false, error })  //closer - without it the error could stack in loop
+    }
+}
+
+export async function getAllComments(req: express.Request, res: express.Response) {
+    try {
+        const { book_id } = req.params;
+        const query = `SELECT * FROM book_store.reviews WHERE book_id = ${book_id}`
+        connection.query(query, (err, results) => {
+            if (err) throw err;
+            res.send({ ok: true, results })
+        })
+    } catch (error) {
+        res.status(500).send({ ok: false, error })
+    }
+}
+
+export async function search(req: express.Request, res: express.Response) {
+    try {
+        const search = req.body.search;
+        const category = req.body.category
+        if (category === "all") {
+            const query = 'SELECT * FROM book_store.books WHERE title LIKE ? OR author LIKE ?';
+            const searchTerm = `${search}%`;
+            connection.query(query, [searchTerm , searchTerm] , (err,results) => {
+                if (err) throw err;
+                res.send({ok:true , results})
+            })
+        }
+    } catch (error) {
+        res.status(500).send({ ok: false, error })
+
+    }
 }

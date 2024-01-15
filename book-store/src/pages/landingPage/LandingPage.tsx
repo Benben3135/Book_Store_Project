@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { noScroll } from "../../features/layout/isScrollSlice";
 import {thereNoUser} from "../../features/user/isUserSlice";
-import {initializeBooksSql, initializeUserSql , initialFavoriteSql} from "../../api/insertData/initializeSql.ts"
+import {initializeBooksSql, initializeUserSql , initialFavoriteSql , intialReviewsSql} from "../../api/insertData/initializeSql.ts"
 import InsertData from "@/api/insertData/InsertData.tsx";
 
 const LandingPage = () => {
@@ -18,7 +18,8 @@ const LandingPage = () => {
     dispatch(thereNoUser())
     initializeUserSql();
     initializeBooksSql();
-    initialFavoriteSql()
+    initialFavoriteSql();
+    intialReviewsSql();
   }, []);
 
 

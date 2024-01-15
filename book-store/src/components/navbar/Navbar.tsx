@@ -61,7 +61,7 @@ const Navbar = () => {
 
   const userDataFromCookie = async () => {
     const data = await getActiveUserData();
-    console.log(data.userData);
+    console.log("userDataFromCookie", data.userData);
     const userData = data.userData;
     setEmail(userData.email);
     setName(userData.name);
@@ -94,7 +94,7 @@ const Navbar = () => {
                   {" "}
                   <Avatar className="mr-8 hover:shadow-2xl hover:scale-110 cursor-pointer transition-all">
                     <AvatarImage src={img} alt="avatarIMG" />
-                    <AvatarFallback>CN</AvatarFallback>
+                    <AvatarFallback></AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>

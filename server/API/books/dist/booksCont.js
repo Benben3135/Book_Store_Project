@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.getAuthorBooks = exports.getOneBook = exports.sendFavorites = exports.addFavorite = exports.createBook = exports.getAllBooks = exports.addAllBooks = void 0;
+exports.search = exports.getAllComments = exports.addComment = exports.getAuthorBooks = exports.getOneBook = exports.sendFavorites = exports.addFavorite = exports.createBook = exports.getAllBooks = exports.addAllBooks = void 0;
 var database_1 = require("../../DB/database");
 var books_1 = require("../../util/books");
 var jwt_simple_1 = require("jwt-simple");
@@ -108,7 +108,7 @@ function getAllBooks(req, res) {
             }
             catch (error) {
                 console.log(error);
-                res.status(500).send({ ok: false, error: error }); //closer - without it the error could stack in loop
+                res.status(500).send({ ok: false, error: error });
             }
             return [2 /*return*/];
         });
@@ -184,7 +184,24 @@ function addFavorite(req, res) {
                                 if (error2)
                                     throw error2;
                                 //@ts-ignore
-                                res.send(insertResults);
+                                if (insertResults) {
+                                    var findAddQuery = "SELECT * FROM book_store.books WHERE book_id = " + book_id_1;
+                                    database_1["default"].query(findAddQuery, function (err2, findResults) {
+                                        if (err2)
+                                            throw err2;
+                                        if (findResults) {
+                                            //@ts-ignore
+                                            var likes = findResults[0].likes;
+                                            var newLikes = parseInt(likes) + 1;
+                                            var insertQuery_1 = "UPDATE book_store.books SET likes = " + newLikes + " WHERE (book_id = " + book_id_1 + ");";
+                                            database_1["default"].query(insertQuery_1, function (err3, insertResults) {
+                                                if (err3)
+                                                    throw err3;
+                                                res.send(insertResults);
+                                            });
+                                        }
+                                    });
+                                }
                             }
                             catch (error) {
                                 res.status(500).send({ ok: false, error: error.message });
@@ -196,7 +213,24 @@ function addFavorite(req, res) {
                         database_1["default"].query(deleteQuery, [user_id_1, book_id_1], function (error3, results) {
                             if (error3)
                                 throw error3;
-                            res.status(200).send({ ok: true, message: "deleted!" });
+                            if (results) {
+                                var findAddQuery = "SELECT * FROM book_store.books WHERE book_id = " + book_id_1;
+                                database_1["default"].query(findAddQuery, function (err2, findResults) {
+                                    if (err2)
+                                        throw err2;
+                                    if (findResults) {
+                                        //@ts-ignore
+                                        var likes = findResults[0].likes;
+                                        var newLikes = parseInt(likes) - 1;
+                                        var insertQuery = "UPDATE book_store.books SET likes = " + newLikes + " WHERE (book_id = " + book_id_1 + ");";
+                                        database_1["default"].query(insertQuery, function (err3, insertResults) {
+                                            if (err3)
+                                                throw err3;
+                                            res.status(200).send({ ok: true, message: "deleted!" });
+                                        });
+                                    }
+                                });
+                            }
                         });
                     }
                 });
@@ -227,7 +261,6 @@ function sendFavorites(req, res) {
             database_1["default"].query(query, [user_id], function (error, results) {
                 if (error)
                     throw error;
-                console.log("sendFavorites results is:", results);
                 res.send({ results: results });
             });
             return [2 /*return*/];
@@ -240,7 +273,6 @@ function getOneBook(req, res) {
         var id, query;
         return __generator(this, function (_a) {
             id = req.params.id;
-            console.log("id I got from client is:", id);
             if (!id)
                 throw new Error("no title");
             try {
@@ -282,3 +314,91 @@ function getAuthorBooks(req, res) {
     });
 }
 exports.getAuthorBooks = getAuthorBooks;
+function addComment(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var comment_1, book_id_2, user, secret, decodedCookie, user_id_2, userQuery;
+        return __generator(this, function (_a) {
+            try {
+                comment_1 = req.body.comment;
+                book_id_2 = req.body.book_id;
+                user = req.cookies.user;
+                if (!user) {
+                    res.status(401).send({ ok: false, message: 'User not authenticated' });
+                    return [2 /*return*/];
+                }
+                secret = process.env.SECRET;
+                if (!secret) {
+                    throw new Error('No secret key');
+                }
+                decodedCookie = jwt_simple_1["default"].decode(user, secret);
+                user_id_2 = decodedCookie.uid;
+                userQuery = "SELECT * FROM book_store.users WHERE uid = \"" + user_id_2 + "\"";
+                database_1["default"].query(userQuery, [user_id_2, book_id_2, comment_1], function (error, resultsUser) {
+                    if (error)
+                        throw error;
+                    if (resultsUser) {
+                        //@ts-ignore
+                        var query = 'INSERT INTO book_store.reviews (user_id, book_id, review,user_name) VALUES (?,?,?,?)';
+                        //@ts-ignore
+                        database_1["default"].query(query, [user_id_2, book_id_2, comment_1, resultsUser[0].name], function (err, results) {
+                            if (err)
+                                throw err;
+                            res.send({ ok: true, results: results });
+                        });
+                    }
+                });
+            }
+            catch (error) {
+                res.status(500).send({ ok: false, error: error }); //closer - without it the error could stack in loop
+            }
+            return [2 /*return*/];
+        });
+    });
+}
+exports.addComment = addComment;
+function getAllComments(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var book_id, query;
+        return __generator(this, function (_a) {
+            try {
+                book_id = req.params.book_id;
+                query = "SELECT * FROM book_store.reviews WHERE book_id = " + book_id;
+                database_1["default"].query(query, function (err, results) {
+                    if (err)
+                        throw err;
+                    res.send({ ok: true, results: results });
+                });
+            }
+            catch (error) {
+                res.status(500).send({ ok: false, error: error });
+            }
+            return [2 /*return*/];
+        });
+    });
+}
+exports.getAllComments = getAllComments;
+function search(req, res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var search_1, category, query, searchTerm;
+        return __generator(this, function (_a) {
+            try {
+                search_1 = req.body.search;
+                category = req.body.category;
+                if (category === "all") {
+                    query = 'SELECT * FROM book_store.books WHERE title LIKE ? OR author LIKE ?';
+                    searchTerm = search_1 + "%";
+                    database_1["default"].query(query, [searchTerm, searchTerm], function (err, results) {
+                        if (err)
+                            throw err;
+                        res.send({ ok: true, results: results });
+                    });
+                }
+            }
+            catch (error) {
+                res.status(500).send({ ok: false, error: error });
+            }
+            return [2 /*return*/];
+        });
+    });
+}
+exports.search = search;

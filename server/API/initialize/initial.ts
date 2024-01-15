@@ -107,3 +107,51 @@ export async function intialLikesSql(req: express.Request, res: express.Response
 
     }
 }
+
+export async function intialReviewsSql(req: express.Request, res: express.Response) {
+    try {
+        
+        const query = `SELECT table_name FROM information_schema.tables WHERE table_name = 'reviews' AND table_schema = 'book_store';`
+        connection.query(query, (err,results) => {
+            if (err) throw err;
+            //@ts-ignore
+            if (results && results.length > 0){
+                res.send("collection excist!")
+            }
+            else{
+                const query = `CREATE TABLE book_store.reviews (
+                    user_id VARCHAR(45) NOT NULL,
+                    book_id INT NOT NULL,
+                    review TEXT NOT NULL,
+                    review_id INT NOT NULL AUTO_INCREMENT,
+                    user_name VARCHAR(45) NOT NULL,
+                    INDEX user_id_idx (user_id ASC) VISIBLE,
+                    INDEX book_id_idx (book_id ASC) VISIBLE,
+                    PRIMARY KEY (review_id),
+                    UNIQUE INDEX review_id_UNIQUE (review_id ASC) VISIBLE,
+                    CONSTRAINT user_id_rev
+                      FOREIGN KEY (user_id)
+                      REFERENCES book_store.users (uid)
+                      ON DELETE NO ACTION
+                      ON UPDATE NO ACTION,
+                    CONSTRAINT book_id_rev
+                      FOREIGN KEY (book_id)
+                      REFERENCES book_store.books (book_id)
+                      ON DELETE NO ACTION
+                      ON UPDATE NO ACTION);`
+
+                
+                connection.query(query, (err,results) => {
+                    if (err) throw err;
+                    res.send("table of reviews created!")
+                })
+            }
+        })
+    } catch (error) {
+
+    }
+}
+
+
+
+  

@@ -12,6 +12,8 @@ import InsertData from "../../api/insertData/InsertData";
 import { motion } from "framer-motion";
 import { likeBook, getFavoriteBooks } from "../../api/books/likeBook";
 import { useNavigate } from "react-router-dom";
+import { Input } from "@/components/ui/input";
+import { handleSerachDB } from "@/api/books/handleSearch";
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -26,11 +28,18 @@ const HomePage = () => {
     description: string;
     image: string;
     likes: number;
+    genre: string;
   }
-  const [activeCat, setActiveCat] = useState("");
+  const [activeCat, setActiveCat] = useState("all");
   const [books, setBooks] = useState<Book[]>([]);
   const [likedBooks, setLikedBooks] = useState<number[]>([]);
+  const [search, setSearch] = useState<string>("");
+  const [searchedBooks, setSearchedBooks] = useState<number[]>([]);
   const ActiveCatRedux = useSelector(categorieSelector);
+
+  useEffect(() => {
+    handleSearch();
+  }, [search]);
 
   useEffect(() => {
     setActiveCat(ActiveCatRedux);
@@ -41,6 +50,7 @@ const HomePage = () => {
     InsertData();
     getAllBooksFromDB();
     getFavoriteBooks();
+    setActiveCat("all");
   }, []);
 
   useEffect(() => {
@@ -66,52 +76,178 @@ const HomePage = () => {
     const updatedFavoriteBooks = await getFavoriteBooks();
     setLikedBooks(updatedFavoriteBooks);
   };
+  const handleSearch = async () => {
+    const response = await handleSerachDB(search, activeCat);
+    const searchedBooks: Book[] = response.results;
+    const searchedBookIds: number[] = searchedBooks.map((book) => book.book_id);
+    setSearchedBooks(searchedBookIds);
+  };
+
+  useEffect(() => {
+    console.log("searchedBooks", searchedBooks);
+  }, [searchedBooks]);
 
   useEffect(() => {
     getFavoriteBooks();
   }, [likedBook]);
 
+  useEffect(() => {
+    console.log("active cat after restart", activeCat);
+  }, []);
+
   return (
     <div className="w-screen h-fit overflow-hidden flex flex-col justify-start items-center">
-      <div className="w-full h-full top-0 overflow-hidden bg-gradient-to-r from-gray-600 to-slate-400">
+      <div className="w-full h-full min-h-screen top-0 overflow-hidden bg-gradient-to-r from-gray-600 to-slate-400">
         <RightSideBar />
-        <div className=" w-3/4 grid lg:grid-cols-4 md:grid-cols-4 sm:grid-cols-3 ml-24 mt-28 gap-8 pb-8">
-          {books.map((book) => (
+        <h1 className=" font-extrabold text-4xl text-center mt-8 text-slate-800">
+          {activeCat} books
+        </h1>
+        <div className=" w-full h-fit flex flex-row items-center justify-center mt-4">
+          <div className=" h-fit w-52">
+            <Input
+              onInput={(ev) => {
+                setSearch((ev.target as HTMLInputElement).value);
+              }}
+              className=" bg-slate-500 text-white"
+              placeholder="search for books"
+            ></Input>
+          </div>
+        </div>
+
+        <div className="w-3/4 grid lg:grid-cols-4 md:grid-cols-4 sm:grid-cols-3 ml-24 mt-10 gap-8 pb-8">
+  {activeCat === "all" &&
+    (searchedBooks.length > 0
+      ? searchedBooks.map((bookId) => {
+          const book = books.find((b) => b.book_id === bookId);
+          return (
             <motion.div
-              className=" bg-slate-300 rounded-xl shadow-xl flex flex-col justify-start items-center hover:scale-105 transition-all cursor-pointer"
-              key={book.book_id}
-              onClick={() => navigate(`/bookPage/${book.book_id}`)}
+              className="bg-slate-300 rounded-xl shadow-xl flex flex-col justify-start items-center hover:scale-105 transition-all cursor-pointer"
+              key={book!.book_id}
+              onClick={() => navigate(`/bookPage/${book!.book_id}`)}
             >
               <h1 className="font-bold text-xl text-slate-800 text-center mt-2 antialiased">
-                {book.title}
+                {book!.title}
               </h1>
-              <p className=" antialiased italic font-thin">{book.author}</p>
+              <p className="antialiased italic font-thin">{book!.author}</p>
               <img
-                className=" w-48 h-60 rounded-xl mb-2"
-                src={book.image}
-                alt={book.title}
+                className="w-48 h-60 rounded-xl mb-2"
+                src={book!.image}
+                alt={book!.title}
               />
-              <div className=" flex flex-row justify-center items-center mt-2 gap-2">
-                <p>{book.likes}</p>
-                {likedBooks.includes(book.book_id) ? (
+              <div className="flex flex-row justify-center items-center mt-2 gap-2">
+                <p>{book!.likes}</p>
+                {likedBooks.includes(book!.book_id) ? (
                   <div
-                    onClick={() => likedBook(book.book_id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      likedBook(book!.book_id);
+                    }}
                     className="rounded-full transition-all cursor-pointer w-6 h-6 flex flex-col justify-center items-center"
                   >
-                    <Heart color="red" />
+                    <Heart className="z-50" color="red" />
                   </div>
                 ) : (
                   <div
-                    onClick={() => likedBook(book.book_id)}
-                    className="hover:bg-red-300 rounded-full transition-all cursor-pointer w-6 h-6 flex flex-col justify-center items-center"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      likedBook(book!.book_id);
+                    }}
+                    className="hover:bg-red-300 rounded-full z-50 transition-all cursor-pointer w-6 h-6 flex flex-col justify-center items-center"
                   >
                     <Heart />
                   </div>
                 )}
               </div>
             </motion.div>
-          ))}
-        </div>
+          );
+        })
+      : books.map((book) => (
+          <motion.div
+            className="bg-slate-300 rounded-xl shadow-xl flex flex-col justify-start items-center hover:scale-105 transition-all cursor-pointer"
+            key={book.book_id}
+            onClick={() => navigate(`/bookPage/${book.book_id}`)}
+          >
+            <h1 className="font-bold text-xl text-slate-800 text-center mt-2 antialiased">
+              {book.title}
+            </h1>
+            <p className="antialiased italic font-thin">{book.author}</p>
+            <img
+              className="w-48 h-60 rounded-xl mb-2"
+              src={book.image}
+              alt={book.title}
+            />
+            <div className="flex flex-row justify-center items-center mt-2 gap-2">
+              <p>{book.likes}</p>
+              {likedBooks.includes(book.book_id) ? (
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    likedBook(book.book_id);
+                  }}
+                  className="rounded-full transition-all cursor-pointer w-6 h-6 flex flex-col justify-center items-center"
+                >
+                  <Heart className="z-50" color="red" />
+                </div>
+              ) : (
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    likedBook(book.book_id);
+                  }}
+                  className="hover:bg-red-300 rounded-full z-50 transition-all cursor-pointer w-6 h-6 flex flex-col justify-center items-center"
+                >
+                  <Heart />
+                </div>
+              )}
+            </div>
+          </motion.div>
+        )))}
+
+  {activeCat !== "all" &&
+    books
+      .filter((book) => book.genre === activeCat)
+      .map((book) => (
+        <motion.div
+          className="bg-slate-300 rounded-xl shadow-xl flex flex-col justify-start items-center hover:scale-105 transition-all cursor-pointer"
+          key={book.book_id}
+          onClick={() => navigate(`/bookPage/${book.book_id}`)}
+        >
+          <h1 className="font-bold text-xl text-slate-800 text-center mt-2 antialiased">
+            {book.title}
+          </h1>
+          <p className="antialiased italic font-thin">{book.author}</p>
+          <img
+            className="w-48 h-60 rounded-xl mb-2"
+            src={book.image}
+            alt={book.title}
+          />
+          <div className="flex flex-row justify-center items-center mt-2 gap-2">
+            <p>{book.likes}</p>
+            {likedBooks.includes(book.book_id) ? (
+              <div
+                onClick={(e) => {
+                  e.stopPropagation();
+                  likedBook(book.book_id);
+                }}
+                className="rounded-full transition-all cursor-pointer w-6 h-6 flex flex-col justify-center items-center"
+              >
+                <Heart className="z-50" color="red" />
+              </div>
+            ) : (
+              <div
+                onClick={(e) => {
+                  e.stopPropagation();
+                  likedBook(book.book_id);
+                }}
+                className="hover:bg-red-300 rounded-full z-50 transition-all cursor-pointer w-6 h-6 flex flex-col justify-center items-center"
+              >
+                <Heart />
+              </div>
+            )}
+          </div>
+        </motion.div>
+      ))}
+</div>;
       </div>
       <div>
         <Footer />

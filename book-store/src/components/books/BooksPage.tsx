@@ -3,6 +3,7 @@ import BookCard, { Book } from './BookCard'
 import { useNavigate } from 'react-router-dom'
 import Debouncing from '../debouncing/Debouncing'
 import axios from 'axios';
+import Review from './Review';
 
 const BooksPage = () => {
     const [bookState, setBooks] = useState<Book[]>([])
