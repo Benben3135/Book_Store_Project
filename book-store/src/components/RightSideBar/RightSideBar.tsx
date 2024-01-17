@@ -20,9 +20,9 @@ const RightSideBar = () => {
     <motion.div
       initial={{ r: 200, opacity: 0 }}
       animate={{ r: 0, opacity: 1 }}
-      className="absolute right-5 w-[30%] md:w-[30%] lg:w-[10%] h-[70%] bg-slate-600 z-0 rounded-b-xl shadow-lg overflow-hidden hover:w-[15%] transition-all"
+      className="absolute right-5 h-32 w-full md:w-[30%] lg:w-[10%] md:h-[70%] bg-slate-600 z-0 rounded-b-xl shadow-lg overflow-hidden md:hover:w-[15%] transition-all"
     >
-      <div className="h-full flex flex-col w-full justify-start items-center">
+      <div className=" grid grid-cols-4 grid-rows-3  md:h-full md:flex md:flex-col md:w-full md:justify-start md:items-center">
         {allCategories.map((category, index) => (
           <motion.div
           initial={{ y: 60, opacity: 0 }}

@@ -18,6 +18,7 @@ const AppWrapper = () => {
   );
 };
 
+//@ts-ignore
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
     <AppWrapper />

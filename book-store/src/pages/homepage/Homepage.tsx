@@ -36,6 +36,8 @@ const HomePage = () => {
   const [search, setSearch] = useState<string>("");
   const [searchedBooks, setSearchedBooks] = useState<number[]>([]);
   const ActiveCatRedux = useSelector(categorieSelector);
+  const [isLoading, setIsLoading] = useState(true);
+
 
   useEffect(() => {
     handleSearch();
@@ -46,8 +48,6 @@ const HomePage = () => {
   }, [ActiveCatRedux]);
 
   useEffect(() => {
-    initializeBooksSql();
-    InsertData();
     getAllBooksFromDB();
     getFavoriteBooks();
     setActiveCat("all");
@@ -60,22 +60,41 @@ const HomePage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const favoriteBooks = await getFavoriteBooks();
-      setLikedBooks(favoriteBooks);
+      try {
+        await initializeBooksSql();
+        await InsertData();
+        await getAllBooksFromDB();
+        await getFavoriteBooks();
+        setActiveCat("all");
+      } catch (error) {
+        console.error("Error initializing data:", error);
+      } finally {
+        setIsLoading(false);
+      }
     };
+
     fetchData();
-  }, [getFavoriteBooks]);
+  }, []);
 
   const getAllBooksFromDB = async () => {
-    const booksFromDB = await getAllBooks();
-    setBooks(booksFromDB);
+    try {
+      const booksFromDB = await getAllBooks();
+      setBooks(booksFromDB || []); // Ensure booksFromDB is not undefined
+    } catch (error) {
+      console.error("Error fetching all books:", error);
+    }
   };
 
   const likedBook = async (id: number) => {
-    await likeBook(id);
-    const updatedFavoriteBooks = await getFavoriteBooks();
-    setLikedBooks(updatedFavoriteBooks);
+    try {
+      await likeBook(id);
+      const updatedFavoriteBooks = await getFavoriteBooks();
+      setLikedBooks(updatedFavoriteBooks);
+    } catch (error) {
+      console.error("Error liking book:", error);
+    }
   };
+
   const handleSearch = async () => {
     const response = await handleSerachDB(search, activeCat);
     const searchedBooks: Book[] = response.results;
@@ -95,6 +114,11 @@ const HomePage = () => {
     console.log("active cat after restart", activeCat);
   }, []);
 
+  if (isLoading) {
+    return <p>Loading...</p>; // or render a loading spinner or component
+  }
+
+
   return (
     <div className="w-screen h-fit overflow-hidden flex flex-col justify-start items-center">
       <div className="w-full h-full min-h-screen top-0 overflow-hidden bg-gradient-to-r from-gray-600 to-slate-400">
@@ -108,146 +132,150 @@ const HomePage = () => {
               onInput={(ev) => {
                 setSearch((ev.target as HTMLInputElement).value);
               }}
-              className=" bg-slate-500 text-white"
+              className=" bg-slate-300 text-white focus:bg-slate-500 focus:scale-105 transition-all"
               placeholder="search for books"
             ></Input>
           </div>
         </div>
-
-        <div className="w-3/4 grid lg:grid-cols-4 md:grid-cols-4 sm:grid-cols-3 ml-24 mt-10 gap-8 pb-8">
-  {activeCat === "all" &&
-    (searchedBooks.length > 0
-      ? searchedBooks.map((bookId) => {
-          const book = books.find((b) => b.book_id === bookId);
-          return (
-            <motion.div
-              className="bg-slate-300 rounded-xl shadow-xl flex flex-col justify-start items-center hover:scale-105 transition-all cursor-pointer"
-              key={book!.book_id}
-              onClick={() => navigate(`/bookPage/${book!.book_id}`)}
-            >
-              <h1 className="font-bold text-xl text-slate-800 text-center mt-2 antialiased">
-                {book!.title}
-              </h1>
-              <p className="antialiased italic font-thin">{book!.author}</p>
-              <img
-                className="w-48 h-60 rounded-xl mb-2"
-                src={book!.image}
-                alt={book!.title}
-              />
-              <div className="flex flex-row justify-center items-center mt-2 gap-2">
-                <p>{book!.likes}</p>
-                {likedBooks.includes(book!.book_id) ? (
-                  <div
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      likedBook(book!.book_id);
-                    }}
-                    className="rounded-full transition-all cursor-pointer w-6 h-6 flex flex-col justify-center items-center"
+        <div className=" grid grid-cols-2 lg:w-3/4 lg:grid-cols-4 md:grid-cols-2 sm:w-1/2 ml-24 mt-10 gap-8 pb-8">
+          {activeCat === "all" &&
+            (searchedBooks.length > 0
+              ? searchedBooks.map((bookId) => {
+                  const book = books.find((b) => b.book_id === bookId);
+                  return (
+                    <motion.div
+                      className="bg-slate-300 rounded-xl shadow-xl flex flex-col justify-start items-center hover:scale-105 transition-all cursor-pointer"
+                      key={book!.book_id}
+                      onClick={() => navigate(`/bookPage/${book!.book_id}`)}
+                    >
+                      <h1 className="font-bold text-xl text-slate-800 text-center mt-2 antialiased">
+                        {book!.title}
+                      </h1>
+                      <p className="antialiased italic font-thin">
+                        {book!.author}
+                      </p>
+                      <img
+                        className="w-48 h-60 rounded-xl mb-2"
+                        src={book!.image}
+                        alt={book!.title}
+                      />
+                      <div className="flex flex-row justify-center items-center mt-2 gap-2">
+                        <p>{book!.likes}</p>
+                        {likedBooks.includes(book!.book_id) ? (
+                          <div
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              likedBook(book!.book_id);
+                            }}
+                            className="rounded-full transition-all cursor-pointer w-6 h-6 flex flex-col justify-center items-center"
+                          >
+                            <Heart className="z-50" color="red" />
+                          </div>
+                        ) : (
+                          <div
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              likedBook(book!.book_id);
+                            }}
+                            className="hover:bg-red-300 rounded-full z-50 transition-all cursor-pointer w-6 h-6 flex flex-col justify-center items-center"
+                          >
+                            <Heart />
+                          </div>
+                        )}
+                      </div>
+                    </motion.div>
+                  );
+                })
+              : books.map((book) => (
+                  <motion.div
+                    className="bg-slate-300 rounded-xl shadow-xl flex flex-col justify-start items-center hover:scale-105 transition-all cursor-pointer"
+                    key={book.book_id}
+                    onClick={() => navigate(`/bookPage/${book.book_id}`)}
                   >
-                    <Heart className="z-50" color="red" />
-                  </div>
-                ) : (
-                  <div
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      likedBook(book!.book_id);
-                    }}
-                    className="hover:bg-red-300 rounded-full z-50 transition-all cursor-pointer w-6 h-6 flex flex-col justify-center items-center"
-                  >
-                    <Heart />
-                  </div>
-                )}
-              </div>
-            </motion.div>
-          );
-        })
-      : books.map((book) => (
-          <motion.div
-            className="bg-slate-300 rounded-xl shadow-xl flex flex-col justify-start items-center hover:scale-105 transition-all cursor-pointer"
-            key={book.book_id}
-            onClick={() => navigate(`/bookPage/${book.book_id}`)}
-          >
-            <h1 className="font-bold text-xl text-slate-800 text-center mt-2 antialiased">
-              {book.title}
-            </h1>
-            <p className="antialiased italic font-thin">{book.author}</p>
-            <img
-              className="w-48 h-60 rounded-xl mb-2"
-              src={book.image}
-              alt={book.title}
-            />
-            <div className="flex flex-row justify-center items-center mt-2 gap-2">
-              <p>{book.likes}</p>
-              {likedBooks.includes(book.book_id) ? (
-                <div
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    likedBook(book.book_id);
-                  }}
-                  className="rounded-full transition-all cursor-pointer w-6 h-6 flex flex-col justify-center items-center"
-                >
-                  <Heart className="z-50" color="red" />
-                </div>
-              ) : (
-                <div
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    likedBook(book.book_id);
-                  }}
-                  className="hover:bg-red-300 rounded-full z-50 transition-all cursor-pointer w-6 h-6 flex flex-col justify-center items-center"
-                >
-                  <Heart />
-                </div>
-              )}
-            </div>
-          </motion.div>
-        )))}
+                    <h1 className="font-bold text-xl text-slate-800 text-center mt-2 antialiased">
+                      {book.title}
+                    </h1>
+                    <p className="antialiased italic font-thin">
+                      {book.author}
+                    </p>
+                    <img
+                      className="w-48 h-60 rounded-xl mb-2"
+                      src={book.image}
+                      alt={book.title}
+                    />
+                    <div className="flex flex-row justify-center items-center mt-2 gap-2">
+                      <p>{book.likes}</p>
+                      {likedBooks.includes(book.book_id) ? (
+                        <div
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            likedBook(book.book_id);
+                          }}
+                          className="rounded-full transition-all cursor-pointer w-6 h-6 flex flex-col justify-center items-center"
+                        >
+                          <Heart className="z-50" color="red" />
+                        </div>
+                      ) : (
+                        <div
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            likedBook(book.book_id);
+                          }}
+                          className="hover:bg-red-300 rounded-full z-50 transition-all cursor-pointer w-6 h-6 flex flex-col justify-center items-center"
+                        >
+                          <Heart />
+                        </div>
+                      )}
+                    </div>
+                  </motion.div>
+                )))}
 
-  {activeCat !== "all" &&
-    books
-      .filter((book) => book.genre === activeCat)
-      .map((book) => (
-        <motion.div
-          className="bg-slate-300 rounded-xl shadow-xl flex flex-col justify-start items-center hover:scale-105 transition-all cursor-pointer"
-          key={book.book_id}
-          onClick={() => navigate(`/bookPage/${book.book_id}`)}
-        >
-          <h1 className="font-bold text-xl text-slate-800 text-center mt-2 antialiased">
-            {book.title}
-          </h1>
-          <p className="antialiased italic font-thin">{book.author}</p>
-          <img
-            className="w-48 h-60 rounded-xl mb-2"
-            src={book.image}
-            alt={book.title}
-          />
-          <div className="flex flex-row justify-center items-center mt-2 gap-2">
-            <p>{book.likes}</p>
-            {likedBooks.includes(book.book_id) ? (
-              <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  likedBook(book.book_id);
-                }}
-                className="rounded-full transition-all cursor-pointer w-6 h-6 flex flex-col justify-center items-center"
-              >
-                <Heart className="z-50" color="red" />
-              </div>
-            ) : (
-              <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  likedBook(book.book_id);
-                }}
-                className="hover:bg-red-300 rounded-full z-50 transition-all cursor-pointer w-6 h-6 flex flex-col justify-center items-center"
-              >
-                <Heart />
-              </div>
-            )}
-          </div>
-        </motion.div>
-      ))}
-</div>;
+          {activeCat !== "all" &&
+            books
+              .filter((book) => book.genre === activeCat)
+              .map((book) => (
+                <motion.div
+                  className="bg-slate-300 rounded-xl shadow-xl flex flex-col justify-start items-center hover:scale-105 transition-all cursor-pointer"
+                  key={book.book_id}
+                  onClick={() => navigate(`/bookPage/${book.book_id}`)}
+                >
+                  <h1 className="font-bold text-xl text-slate-800 text-center mt-2 antialiased">
+                    {book.title}
+                  </h1>
+                  <p className="antialiased italic font-thin">{book.author}</p>
+                  <img
+                    className="w-48 h-60 rounded-xl mb-2"
+                    src={book.image}
+                    alt={book.title}
+                  />
+                  <div className="flex flex-row justify-center items-center mt-2 gap-2">
+                    <p>{book.likes}</p>
+                    {likedBooks.includes(book.book_id) ? (
+                      <div
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          likedBook(book.book_id);
+                        }}
+                        className="rounded-full transition-all cursor-pointer w-6 h-6 flex flex-col justify-center items-center"
+                      >
+                        <Heart className="z-50" color="red" />
+                      </div>
+                    ) : (
+                      <div
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          likedBook(book.book_id);
+                        }}
+                        className="hover:bg-red-300 rounded-full z-50 transition-all cursor-pointer w-6 h-6 flex flex-col justify-center items-center"
+                      >
+                        <Heart />
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
+              ))}
+        </div>
+        ;
       </div>
       <div>
         <Footer />

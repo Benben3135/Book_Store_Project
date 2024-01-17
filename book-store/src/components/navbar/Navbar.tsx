@@ -94,7 +94,7 @@ const Navbar = () => {
                   {" "}
                   <Avatar className="mr-8 hover:shadow-2xl hover:scale-110 cursor-pointer transition-all">
                     <AvatarImage src={img} alt="avatarIMG" />
-                    <AvatarFallback></AvatarFallback>
+                    <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>

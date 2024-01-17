@@ -90,7 +90,7 @@ const SpecificBookPage = () => {
   };
 
   return (
-    <div className=" w-screen h-screen bg-gradient-to-r from-sky-200 to-teal-100  flex flex-row justify-center items-start overflow-hidden">
+    <div className=" w-screen h-screen bg-gradient-to-r from-sky-200 to-teal-100  flex flex-col md:flex-row justify-center items-start overflow-hidden">
       <div className=" z-10 flex flex-col justify-start items-center w-fit bg-gradient-to-r from-teal-100 to-sky-200 mt-8 rounded-lg shadow-xl">
         <div className=" mt-8 flex flex-col justify-center items-center gap-4">
           <h1 className=" text-6xl font-sans font-extrabold">{book?.title}</h1>
@@ -122,7 +122,7 @@ const SpecificBookPage = () => {
       <motion.div
         initial={{ x: -400, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
-        className=" w-1/4 h-3/4 bg-slate-100 z-0 mt-14"
+        className=" w-full md:w-1/4 h-3/4 bg-slate-100 z-0 md:mt-14"
       >
         <div className=" flex flex-col justify-between items-center h-full">
           <div className=" w-fit h-fit bg-slate-300 rounded-lg shadow-lg mt-4">
