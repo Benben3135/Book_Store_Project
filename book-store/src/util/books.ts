@@ -178,7 +178,7 @@ export const books:Book[] = [
         publisher: "",
         description: "",
         image: "https://m.media-amazon.com/images/I/416v0HupVTL.jpg",
-        likes: 8,
+        likes: 9,
         genre: "fiction"
     },
     {
@@ -188,17 +188,87 @@ export const books:Book[] = [
         publisher: "houston tx",
         description: "How overthinking can be detrimental to your social life.The hidden dangers of overthinking and what can happen to you if it’s left untreated. How to declutter your mind from all the noise of the modern world.How overthinking affects your body, your energy levels, and your everyday mood.How your surroundings affect your state of mind, and what you NEED to do in order to break out of that state.Bad habits we perform every day and don’t even realize are destroying our sanity (and how to overcome them properly).How to cut out toxic people from your life, which cloud your judgment and make you feel miserable.",
         image: "https://covers.openlibrary.org/b/id/12009823-L.jpg",
-        likes: 8,
+        likes: 310,
         genre: "self-help"
     },
     {
-        title: "",
-        author: "",
-        pageNum: 23,
-        publisher: "",
-        description: "",
-        image: "",
-        likes: 8,
-        genre: ""
+        title: "The War of the Worlds",
+        author: "H. G. Wells",
+        pageNum: 145,
+        publisher: "Dover Publications",
+        description: "The ultimate science fiction classic: for more than one hundred years, this compelling tale of the Martian invasion of Earth has enthralled readers with a combination of imagination and incisive commentary on the imbalance of power that continues to be relevant today. The style is revolutionary for its era, employing a sophisticated first and third person account of the events which is both personal and focused on the holistic downfall of Earth's society. The Martians, as evil, mechanical and unknown a threat they are, remain daunting in today's society, where, despite technology's mammoth advances, humanity's hegemony over Earth is yet to be called into question. In Well's introduction to the book, where the character discusses with the later deceased Ogilvy about astronomy and the possibility of alien life defeating the 'savage' (to them) nineteenth-century Britain, is he insinuating that this is the truth and fate of humanity? It's up to you to decide",
+        image: "https://covers.openlibrary.org/b/id/8740869-L.jpg",
+        likes: 408,
+        genre: "science fiction"
     },
+    {
+        title: "The Bachman Books",
+        author: "Stephen King",
+        pageNum: 692,
+        publisher: "New American Library",
+        description: "For years readers of these four novels wrote to `Richard Bachman` asking if the author was really Stephen King writing under a psudonym. Now the secret is out--and so are these four spellbinding tales of future shock and suspense, available for the first time in one volume.",
+        image: "https://covers.openlibrary.org/b/id/9255833-L.jpg",
+        likes: 780,
+        genre: "horror"
+    },
+    {
+        title: "Danse Macabre",
+        author: "Stephen King",
+        pageNum: 400,
+        publisher: "Everest House, Berkeley Books",
+        description: "Stephen King's stunning success as a novelist just may be unrivaled in publishing history. Other writers in their early twenties have been acclaimed, but few have reached sales figures of over 25 million books a decade later, and none save King has staked such a solid claim as undisputed master of a very special literary genre--the horror story. Carrie, The Shining, The Dead Zone, Firestarter have led to a worldwide curiosity about Stephen King and his intuitive affinity for the spine-chilling tale.",
+        image: "https://m.media-amazon.com/images/I/51V87RGNBdL._AC_UF1000,1000_QL80_.jpg",
+        likes: 402,
+        genre: "horror"
+    },
+    {
+        title: "JavaScript - The Good Parts",
+        author: "Douglas Crockford",
+        pageNum: 153,
+        publisher: "O'Reilly",
+        description: "Covers the bits of Javascript that are worth using, and how to use them, as well as the bits that should be avoided.",
+        image: "https://covers.openlibrary.org/b/id/9245523-L.jpg",
+        likes: 208,
+        genre: "science"
+    },
+    // {
+    //     title: "",
+    //     author: "",
+    //     pageNum: ,
+    //     publisher: "",
+    //     description: "",
+    //     image: "",
+    //     likes: ,
+    //     genre: ""
+    // },
+    // {
+    //     title: "",
+    //     author: "",
+    //     pageNum: ,
+    //     publisher: "",
+    //     description: "",
+    //     image: "",
+    //     likes: ,
+    //     genre: ""
+    // },
+    // {
+    //     title: "",
+    //     author: "",
+    //     pageNum: ,
+    //     publisher: "",
+    //     description: "",
+    //     image: "",
+    //     likes: ,
+    //     genre: ""
+    // },
+    // {
+    //     title: "",
+    //     author: "",
+    //     pageNum: ,
+    //     publisher: "",
+    //     description: "",
+    //     image: "",
+    //     likes: ,
+    //     genre: ""
+    // },
 ]

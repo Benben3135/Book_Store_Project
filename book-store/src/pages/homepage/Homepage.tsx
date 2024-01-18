@@ -52,6 +52,13 @@ const HomePage = () => {
     getFavoriteBooks();
     setActiveCat("all");
   }, []);
+  useEffect(() => {
+
+    const storedLikedBooks = localStorage.getItem('likedBooks');
+    if (storedLikedBooks) {
+      setLikedBooks(JSON.parse(storedLikedBooks));
+    }
+  }, []);
 
   useEffect(() => {
     dispatch(scroll()); // Dispatch the scroll action to auto
@@ -86,14 +93,26 @@ const HomePage = () => {
   };
 
   const likedBook = async (id: number) => {
-    try {
+  try {
+    // Check if the book is already liked
+    const isLiked = likedBooks.includes(id);
+
+    if (isLiked) {
+
+      setLikedBooks(prevLikedBooks => prevLikedBooks.filter(bookId => bookId !== id));
+
+      localStorage.setItem('likedBooks', JSON.stringify(likedBooks.filter(bookId => bookId !== id)));
+    } else {
       await likeBook(id);
-      const updatedFavoriteBooks = await getFavoriteBooks();
-      setLikedBooks(updatedFavoriteBooks);
-    } catch (error) {
-      console.error("Error liking book:", error);
+
+      setLikedBooks(prevLikedBooks => [...prevLikedBooks, id]);
+
+      localStorage.setItem('likedBooks', JSON.stringify([...likedBooks, id]));
     }
-  };
+  } catch (error) {
+    console.error("Error handling like/unlike:", error);
+  }
+};
 
   const handleSearch = async () => {
     const response = await handleSerachDB(search, activeCat);
