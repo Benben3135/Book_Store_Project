@@ -54,6 +54,7 @@ export async function initialUserSql(req: express.Request, res: express.Response
                     email VARCHAR(45) NOT NULL,
                     img TEXT NULL,
                     password VARCHAR(45) NULL,
+                    admin BOOLEAN NOT NULL,
                     PRIMARY KEY (uid),
                     UNIQUE INDEX uid_UNIQUE (uid ASC) VISIBLE
                 );`

@@ -35,7 +35,7 @@ export async function register(req: express.Request, res: express.Response) {
                 res.cookie("user", token, { httpOnly: true, maxAge: 1000 * 60 * 60 * 14 })
                 res.send({ ok: true, results })
             } else {
-                const insertQuery = 'INSERT INTO book_store.users (uid, name, email, img, password) VALUES (?, ?, ?, ?, "")';
+                const insertQuery = 'INSERT INTO book_store.users (uid, name, email, img, password , admin) VALUES (?, ?, ?, ?, "" , false)';
                 connection.query(insertQuery, [uid, name, email, img], (err2, resultsAdd) => {
                     try {
                         if (err2) throw err2;
