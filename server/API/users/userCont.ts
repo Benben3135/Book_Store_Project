@@ -14,6 +14,7 @@ export async function register(req: express.Request, res: express.Response) {
         const email = userData.email;
         const name = userData.displayName;
         const img = userData.photoURL;
+        console.log(uid, email, name, img)
 
         if (!uid || !email || !name || !img) throw new Error("no data");
 
@@ -34,18 +35,20 @@ export async function register(req: express.Request, res: express.Response) {
                 res.cookie("user", token, { httpOnly: true, maxAge: 1000 * 60 * 60 * 14 })
                 res.send({ ok: true, results })
             } else {
-                console.log("user not excist");
-                const insertQuery = 'INSERT INTO book_store.users (uid, name, email, img, password) VALUES (?, ?, ?, ?, "")';
+                const insertQuery = 'INSERT INTO book_store.users (uid, name, email, img, password , admin) VALUES (?, ?, ?, ?, "" , false)';
                 connection.query(insertQuery, [uid, name, email, img], (err2, resultsAdd) => {
                     try {
-                        if (err) throw err;
+                        if (err2) throw err2;
                         //@ts-ignore
-                        if (resultsAdd.affectedRows) { //@ts-ignore
-                            const queryUser = `SELECT * FROM book_store.users WHERE (uid = ${uid});`
+                        if (resultsAdd.affectedRows > 0) {
+                            console.log(uid)
+                            // @ts-ignore
+                            const queryUser = `SELECT * FROM book_store.users WHERE (uid = '${uid}');`
                             connection.query(queryUser, (err2, results) => {
                                 if (err2) throw err2;
                                 //@ts-ignore
                                 const data = uid
+                                console.log("data = " , data)
                                 const cookie = { data }
                                 const token = jwt.encode(cookie, secret)
                                 console.log("creating a cookie!", cookie)
@@ -54,22 +57,15 @@ export async function register(req: express.Request, res: express.Response) {
                                 res.send({ ok: true, results })
                             })
                         }
-                        else {
-                            res.status(401).send({ ok: false, message: "register function failed!" })
-                        }
+
 
                     } catch (error) {
-                        res.status(500).send({ ok: false, error })
+                        res.status(500).send({ ok: false, error: (error as Error).message })
 
                     }
                 })
             }
         })
-
-
-
-
-        // res.status(200).send({ message: "User created successfully" });
     } catch (error: any) {
         console.error("Error creating user:", error);
         res.status(500).send({ ok: false, error: error.message });
@@ -91,17 +87,15 @@ export async function getActiveUserData(req: express.Request, res: express.Respo
         }
 
         const decodedCookie = jwt.decode(user, secret);
+        console.log("decoded cookie" , decodedCookie.data)
 
-        if (!decodedCookie || typeof decodedCookie !== 'object' || !decodedCookie.uid) {
-            res.status(401).send({ ok: false, message: 'Invalid user cookie' });
-            return;
-        }
+       
 
-        const { uid } = decodedCookie;
-        console.log(uid)
+        const data = decodedCookie.uid;
+        console.log("uid from cookie" , data)
 
         const query = `SELECT * FROM book_store.users WHERE uid = ?`;
-        connection.query(query, [uid], (err, results) => {
+        connection.query(query, [data], (err, results) => {
             try {
                 if (err) {
                     throw err;

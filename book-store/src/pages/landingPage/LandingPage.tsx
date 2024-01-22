@@ -5,7 +5,9 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { noScroll } from "../../features/layout/isScrollSlice";
-import {thereNoUser} from "../../features/user/isUserSlice"
+import {thereNoUser} from "../../features/user/isUserSlice";
+import {initializeBooksSql, initializeUserSql , initialFavoriteSql , intialReviewsSql} from "../../api/insertData/initializeSql.ts"
+import InsertData from "@/api/insertData/InsertData.tsx";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -14,7 +16,12 @@ const LandingPage = () => {
   useEffect(() => {
     dispatch(noScroll()); // Dispatch the scroll action
     dispatch(thereNoUser())
+    initializeUserSql();
+    initializeBooksSql();
+    initialFavoriteSql();
+    intialReviewsSql();
   }, []);
+
 
   return (
     <div className=" h-full w-full bg-gradient-to-r from-purple-100 to-blue-200 group">
@@ -28,10 +35,12 @@ const LandingPage = () => {
           Welcome to Booksite We have the largest collection of modern, classic,
           and other genre books.
         </p>
+        <Button
+        onClick={() => navigate("/proRegister")}
+        className=" mt-2 shadow-md shadow-yellow-200">Try BookeriaPro®</Button>
       </div>
       <div className=" h-3/4 md:h-1/3 mx-auto bg-gradient-to-r from-sky-300 to-blue-200 flex flex-col md:justify-center items-center justify-start shadow-lg">
         <div className="flex flex-col md:flex-row gap-4 md:py-0 py-2">
-          {/* TODO: change those images to our real app images */}
           <LandImage src="../../../public/images/2250768_3M_Cloud_Library_Web_Patron.jpg" />
           <LandImage src="../../../public/images/Google-Play-Books.jpg" />
           <LandImage src="../../../public/images/unnamed.webp" />
