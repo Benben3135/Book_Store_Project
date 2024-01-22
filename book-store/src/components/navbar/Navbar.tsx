@@ -1,29 +1,5 @@
-import { useNavigate } from "react-router-dom";
-import { thereUser, isUserSelector } from "../../features/user/isUserSlice";
-import { useSelector, useDispatch } from "react-redux";
-import { Button } from "../ui/button";
-import Logo from "../icons/svg/Logo";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { userSelector } from "@/features/user/userSlice";
-import { useEffect, useState } from "react";
 import { getActiveUserData } from "@/api/users/getActiveUserData";
-import {
-  Cloud,
-  CreditCard,
-  Github,
-  Keyboard,
-  LifeBuoy,
-  LogOut,
-  Mail,
-  MessageSquare,
-  Plus,
-  PlusCircle,
-  Settings,
-  User,
-  UserPlus,
-  Users,
-  LogOutIcon,
-} from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,6 +8,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { userSelector } from "@/features/user/userSlice";
+import {
+  LogOutIcon,
+  User
+} from "lucide-react";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { isUserSelector } from "../../features/user/isUserSlice";
+import Logo from "../icons/svg/Logo";
+import { Button } from "../ui/button";
 
 const Navbar = () => {
   interface UserData {

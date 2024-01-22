@@ -1,13 +1,11 @@
-import { useEffect, useState } from "react";
-import { Ghost } from "lucide-react";
-import LandImage from "../../components/images/LandImage";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { initialFavoriteSql, initializeBooksSql, initializeUserSql, intialReviewsSql } from "../../api/insertData/initializeSql.ts";
+import LandImage from "../../components/images/LandImage";
 import { noScroll } from "../../features/layout/isScrollSlice";
-import {thereNoUser} from "../../features/user/isUserSlice";
-import {initializeBooksSql, initializeUserSql , initialFavoriteSql , intialReviewsSql} from "../../api/insertData/initializeSql.ts"
-import InsertData from "@/api/insertData/InsertData.tsx";
+import { thereNoUser } from "../../features/user/isUserSlice";
 
 const LandingPage = () => {
   const navigate = useNavigate();

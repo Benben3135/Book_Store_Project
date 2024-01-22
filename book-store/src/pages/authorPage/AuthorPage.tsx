@@ -1,11 +1,8 @@
-import { useEffect, useState } from "react";
 import { getAuthorBooks } from "@/api/books/getAuthorBooks";
-import { useParams } from "react-router-dom";
-import { stringify } from "querystring";
 import { Badge } from "@/components/ui/badge";
-import { ThumbsUp } from "lucide-react";
-import { BookOpenText } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { BookOpenText, ThumbsUp } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 const AuthorPage = () => {
   interface Book {

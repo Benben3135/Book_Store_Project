@@ -1,13 +1,4 @@
 import { getActiveUserData } from "@/api/users/getActiveUserData";
-import { deleteUser } from "../../api/users/delete";
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { noScroll } from "../../features/layout/isScrollSlice";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Frown } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { changeNameServer } from "../../api/users/changeName";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -18,19 +9,27 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  DialogTrigger
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AlertDialogAction } from "@radix-ui/react-alert-dialog";
 import { DialogClose } from "@radix-ui/react-dialog";
+import { motion } from "framer-motion";
+import { Frown } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { changeNameServer } from "../../api/users/changeName";
+import { deleteUser } from "../../api/users/delete";
+import { noScroll } from "../../features/layout/isScrollSlice";
 const Profile = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");

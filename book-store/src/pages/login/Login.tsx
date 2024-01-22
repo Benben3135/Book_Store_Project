@@ -95,7 +95,7 @@ const Login = () => {
           loginUser(user);
         }
       })
-      .catch((error) => {
+      .catch(() => {
         setEmailWrong(true);
       });
   };
