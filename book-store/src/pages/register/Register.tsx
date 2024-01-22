@@ -1,6 +1,4 @@
 import TypingAnimation from "@/components/animations/TypingAnimation ";
-import axios from "axios";
-import { register } from "../../api/users/register";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -16,14 +14,14 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { motion } from "framer-motion";
-import { ArrowRight, Minimize, Star } from "lucide-react";
+import { ArrowRight, Check, Minimize, Star, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { register } from "../../api/users/register";
 import { scroll } from "../../features/layout/isScrollSlice";
+import { thereNoUser } from "../../features/user/isUserSlice";
 import { auth, provider } from "../../firebase";
-import { Check, X } from "lucide-react";
-import {thereNoUser} from "../../features/user/isUserSlice"
 
 const Register = () => {
   const dispatch = useDispatch();

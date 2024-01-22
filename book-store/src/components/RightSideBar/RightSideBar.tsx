@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { categorieSelector, setActiveCategorie } from "../../features/categories/categorieSlice";
 import { Categories } from "../../util/categories"; // Replace with the actual path to your enum file

@@ -1,11 +1,10 @@
-import React from "react";
-import { scroll } from "../../features/layout/isScrollSlice";
-import { useDispatch } from "react-redux";
-import { thereNoUser } from "../../features/user/isUserSlice";
-import { useEffect, useState } from "react";
-import { PenIcon, Library, Keyboard, Check } from "lucide-react";
-import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { motion } from "framer-motion";
+import { Check, Keyboard, Library, PenIcon } from "lucide-react";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { scroll } from "../../features/layout/isScrollSlice";
+import { thereNoUser } from "../../features/user/isUserSlice";
 
 const ProRegister = () => {
   const dispatch = useDispatch();
