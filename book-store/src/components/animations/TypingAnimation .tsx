@@ -1,21 +1,24 @@
-import React, { FC } from "react";
 import { motion } from "framer-motion";
+import { FC } from "react";
 
 interface TypingAnimationProps {
   text: string;
   highlightedText?: string;
 }
 
-const TypingAnimation: FC<TypingAnimationProps> = ({ text, highlightedText }) => {
+const TypingAnimation: FC<TypingAnimationProps> = ({
+  text,
+  highlightedText,
+}) => {
   const typingVariants = {
     hidden: { opacity: 0 },
     visible: (i: number) => ({
       opacity: 1,
-      transition: { delay: i * 0.1 }
-    })
+      transition: { delay: i * 0.1 },
+    }),
   };
 
-  const renderText = (text: string, isHighlighted: boolean = false) => {
+  const renderText = (text: string) => {
     return text.split("").map((char, index) => (
       <motion.span
         key={index}
@@ -34,7 +37,7 @@ const TypingAnimation: FC<TypingAnimationProps> = ({ text, highlightedText }) =>
       {renderText(text)}
       {highlightedText && (
         <span className="text-blue-500">
-          {renderText(highlightedText, true)}
+          {renderText(highlightedText)}
         </span>
       )}
     </h1>

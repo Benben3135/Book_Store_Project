@@ -1,4 +1,3 @@
-import axios from "axios";
 
 export const changeNameServer = async (name:string, uid:string) => {
   try {

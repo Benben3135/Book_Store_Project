@@ -1,18 +1,15 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { addCommentToDB, getAllComments } from "@/api/books/addComment";
 import { getOneBook } from "@/api/books/getOneBook";
-import Review from "./Review";
-import { noScroll } from "../../features/layout/isScrollSlice";
-import { useDispatch } from "react-redux";
-import { thereUser } from "@/features/user/isUserSlice";
 import { Badge } from "@/components/ui/badge";
-import { useNavigate } from "react-router-dom";
+import { thereUser } from "@/features/user/isUserSlice";
 import { motion } from "framer-motion";
-import { Button } from "../ui/button";
 import { Send } from "lucide-react";
-import { addCommentToDB } from "@/api/books/addComment";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { noScroll } from "../../features/layout/isScrollSlice";
+import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { getAllComments } from "@/api/books/addComment";
 
 const SpecificBookPage = () => {
   interface Book {
@@ -38,7 +35,6 @@ const SpecificBookPage = () => {
 
   const { book_id } = useParams();
   const [book, setBook] = useState<Book>();
-  const [author, setAuthor] = useState("");
   const [comment, setComment] = useState<string>("");
   const [allComments, setAllComments] = useState<Comment[]>([]);
   useEffect(() => {
@@ -72,7 +68,6 @@ const SpecificBookPage = () => {
         console.log("sending to getOneBook", bookUidAsNumber);
         const bookData: Book = await getOneBook(bookUidAsNumber);
         setBook(bookData);
-        setAuthor(bookData.author);
       } catch (error) {
         console.error("Error fetching book:", error);
       }

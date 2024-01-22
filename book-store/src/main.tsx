@@ -1,11 +1,9 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
+import { Provider, useSelector } from "react-redux";
 import App from "./App.tsx";
-import "./index.css";
-import Navbar from "./components/navbar/Navbar.tsx";
-import { Provider , useSelector } from "react-redux";
 import { store } from './app/store';
 import { isScrollSelector } from './features/layout/isScrollSlice';
+import "./index.css";
 
 
 const AppWrapper = () => {
